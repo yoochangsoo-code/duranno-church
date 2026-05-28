@@ -325,6 +325,29 @@ export interface DestinationProfile {
 
 Then create `src/travel/recommendation.ts` with deterministic destination data and scoring:
 
+The `destinations` array must include at least these 18 records, each with the listed `id`, Korean `name`, and `imageUrl`. The full records may tune tags, companion fit, budgets, methods, and itineraries, but every row below must exist in the implementation:
+
+| id | name | imageUrl |
+| --- | --- | --- |
+| `jeju` | `제주` | `/travel-images/jeju.png` |
+| `busan` | `부산` | `/travel-images/busan.png` |
+| `gangneung` | `강릉` | `/travel-images/gangneung.png` |
+| `gyeongju` | `경주` | `/travel-images/gyeongju.png` |
+| `seoul` | `서울` | `/travel-images/seoul.png` |
+| `yeosu` | `여수` | `/travel-images/yeosu.png` |
+| `sokcho` | `속초` | `/travel-images/sokcho.png` |
+| `osaka` | `오사카` | `/travel-images/osaka.png` |
+| `danang` | `다낭` | `/travel-images/danang.png` |
+| `taipei` | `타이베이` | `/travel-images/taipei.png` |
+| `fukuoka` | `후쿠오카` | `/travel-images/fukuoka.png` |
+| `bangkok` | `방콕` | `/travel-images/bangkok.png` |
+| `singapore` | `싱가포르` | `/travel-images/singapore.png` |
+| `bali` | `발리` | `/travel-images/bali.png` |
+| `canadian-rockies-aurora` | `캐나다 록키 오로라` | `/travel-images/canadian-rockies-aurora.png` |
+| `hawaii` | `하와이` | `/travel-images/hawaii.png` |
+| `shanghai-hangzhou` | `상하이·항저우` | `/travel-images/shanghai-hangzhou.png` |
+| `cruise` | `크루즈 여행` | `/travel-images/cruise.png` |
+
 ```ts
 import {
   AccommodationPreference,
