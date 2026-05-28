@@ -14,7 +14,7 @@ const METHOD_LABELS: Record<TravelMethod, string> = {
   'rental-car': '렌터카 여행',
   'public-transit': '대중교통 여행',
   resort: '리조트 여행',
-  theme: '테마 여행',
+  theme: '관심사 중심 테마여행',
 };
 
 const DESTINATIONS: DestinationProfile[] = [
@@ -324,6 +324,20 @@ export function getDestinationCount(): number {
   return DESTINATIONS.length;
 }
 
+export function getDestinationProfiles(): readonly DestinationProfile[] {
+  return DESTINATIONS.map((destination) => ({
+    ...destination,
+    tags: [...destination.tags],
+    feelings: [...destination.feelings],
+    goodFor: [...destination.goodFor],
+    methods: [...destination.methods],
+    idealPeriods: [...destination.idealPeriods],
+    movement: [...destination.movement],
+    accommodations: [...destination.accommodations],
+    itinerary: [...destination.itinerary],
+  }));
+}
+
 export function getTravelMethodLabel(method: TravelMethod): string {
   return METHOD_LABELS[method];
 }
@@ -442,14 +456,35 @@ function isThemeFriendlyTrip(answers: TravelAnswers): boolean {
 
 function preferredMethodOrder(answers: TravelAnswers): TravelMethod[] {
   if (answers.accommodation === 'premium') {
-    return ['resort', 'package', 'theme', 'rental-car', 'public-transit', 'independent'];
+    return [
+      'resort',
+      'package',
+      'theme',
+      'rental-car',
+      'public-transit',
+      'independent',
+    ];
   }
 
   if (answers.movement === 'short') {
-    return ['public-transit', 'resort', 'theme', 'package', 'independent', 'rental-car'];
+    return [
+      'public-transit',
+      'resort',
+      'theme',
+      'package',
+      'independent',
+      'rental-car',
+    ];
   }
 
-  return ['independent', 'public-transit', 'rental-car', 'theme', 'package', 'resort'];
+  return [
+    'independent',
+    'public-transit',
+    'rental-car',
+    'theme',
+    'package',
+    'resort',
+  ];
 }
 
 function buildReasons(
@@ -465,7 +500,7 @@ function buildReasons(
 
   if (method === 'theme') {
     reasons.push(
-      '문화 코스와 식사 동선을 함께 묶어 설명을 들으며 이동할 수 있어 친구들과 흐름이 끊기지 않습니다.',
+      '관심사에 맞춘 문화 코스와 식사 동선을 함께 묶어 친구들과 흐름이 끊기지 않습니다.',
     );
   }
 
