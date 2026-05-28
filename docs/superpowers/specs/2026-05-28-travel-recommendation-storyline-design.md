@@ -12,7 +12,9 @@ The core promise is:
 
 > Tell us what kind of trip you want now, and we will suggest the TOP 3 destinations and travel methods that fit your people, budget, schedule, and pace.
 
-The result should be practical enough for the user to imagine booking the trip. Consultation and booking buttons appear after the recommendation content.
+The result should be practical enough for the user to imagine booking the trip. Consultation and booking buttons appear after the recommendation content. The destination pool should be broad enough that different answers produce meaningfully different results, not a repeated rotation of only a few places.
+
+The C-Tour logo image from `C:\Temp\ai\ctourlogo.jpg` should appear in a top corner of the program header.
 
 ## User Flow
 
@@ -157,11 +159,20 @@ The result page should show:
 1. User travel profile summary
 2. First-choice destination
 3. Two alternative destinations
-4. Recommended travel method
-5. Period-matched mini itinerary
-6. Estimated budget range
-7. Consultation and booking calls to action
-8. Share coupon call to action
+4. Generated destination image for each recommended destination
+5. Recommended travel method
+6. Period-matched mini itinerary
+7. Estimated budget range
+8. Consultation and booking calls to action
+9. Share coupon call to action
+
+Destination images should be generated raster assets and saved inside the project so the board-attached program does not depend on external image URLs. Each TOP 3 recommendation card should show the relevant destination image with accessible alt text.
+
+The first implementation should include at least 18 destination candidates, balanced across domestic and international travel plus special-format trips. Initial destination pool:
+
+- Domestic: Jeju, Busan, Gangneung, Gyeongju, Seoul, Yeosu, Sokcho
+- International: Osaka, Danang, Taipei, Fukuoka, Bangkok, Singapore, Bali, Hawaii, Canadian Rockies Aurora, Shanghai-Hangzhou
+- Special format: Cruise travel
 
 ## Travel Method Options
 
@@ -269,6 +280,8 @@ Avoid:
 
 - The user can finish the questionnaire without feeling it is too long.
 - The result provides TOP 3 destinations with concrete reasons.
+- The recommendation pool includes at least 18 destination candidates across domestic, international, and special-format travel.
+- Each recommended destination is shown with a relevant generated image.
 - Budget and travel period visibly affect the recommendation.
 - Theme travel appears frequently but does not dominate the visible sales language.
 - Consultation and booking actions appear only after useful results.

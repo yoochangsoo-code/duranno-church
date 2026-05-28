@@ -12,20 +12,21 @@
 
 ## File Structure
 
-- Create `src/travel/types.ts`: shared travel answer, destination, recommendation, itinerary, and coupon types.
-- Create `src/travel/recommendation.ts`: destination data, scoring, per-person budget calculation, TOP 3 selection, theme-travel weighting, mini itinerary generation.
+- Create `src/travel/types.ts`: shared travel answer, destination, recommendation, itinerary, image, and coupon types.
+- Create `public/travel-images/*.png`: generated destination images for at least 18 recommendation candidates.
+- Create `public/ctourlogo.jpg`: C-Tour logo copied from `C:\Temp\ai\ctourlogo.jpg`.
+- Create `src/travel/recommendation.ts`: destination data, image paths, scoring, per-person budget calculation, TOP 3 selection, theme-travel weighting, mini itinerary generation.
 - Create `src/travel/recommendation.test.ts`: executable TypeScript tests for budget calculation, TOP 3 shape, and theme-travel weighting.
 - Create `src/travel/coupon.ts`: share link constant, coupon amount selection, coupon code generation, clipboard helper.
 - Create `src/travel/coupon.test.ts`: executable TypeScript tests for amount digit mapping and coupon code format.
 - Replace `src/App.tsx`: questionnaire, result page, consultation CTAs, and share coupon UI.
 - Modify `src/index.css`: global font/background rules for the travel app.
-- Modify `package.json`: add domain test scripts.
+- Modify `package.json`: add domain test scripts after the referenced test files exist.
 
 ## Task 1: Add Travel Domain Types
 
 **Files:**
 - Create: `src/travel/types.ts`
-- Modify: `package.json`
 
 - [ ] **Step 1: Create travel type definitions**
 
@@ -136,37 +137,110 @@ export interface CouponResult {
 }
 ```
 
-- [ ] **Step 2: Add test scripts**
-
-Modify `package.json` scripts to include:
-
-```json
-"test:domain": "tsx src/travel/recommendation.test.ts && tsx src/travel/coupon.test.ts",
-"test": "npm run test:domain && npm run lint"
-```
-
-Keep existing scripts unchanged.
-
-- [ ] **Step 3: Run typecheck**
+- [ ] **Step 2: Run typecheck**
 
 Run: `npm run lint`
 
-Expected: it may fail until later tasks create referenced test files only if scripts are malformed. If it fails on unrelated existing encoding strings in `src/App.tsx`, continue and replace `src/App.tsx` in Task 4.
+Expected: PASS.
 
-- [ ] **Step 4: Commit**
+- [ ] **Step 3: Commit**
 
 Run:
 
 ```bash
-git add package.json src/travel/types.ts
+git add src/travel/types.ts
 git commit -m "feat: add travel domain types"
 ```
 
-## Task 2: Implement Recommendation Rules With Tests
+## Task 2: Generate Destination Image Assets
+
+**Files:**
+- Create: `public/travel-images/jeju.png`
+- Create: `public/travel-images/busan.png`
+- Create: `public/travel-images/gangneung.png`
+- Create: `public/travel-images/gyeongju.png`
+- Create: `public/travel-images/seoul.png`
+- Create: `public/travel-images/yeosu.png`
+- Create: `public/travel-images/sokcho.png`
+- Create: `public/travel-images/osaka.png`
+- Create: `public/travel-images/danang.png`
+- Create: `public/travel-images/taipei.png`
+- Create: `public/travel-images/fukuoka.png`
+- Create: `public/travel-images/bangkok.png`
+- Create: `public/travel-images/singapore.png`
+- Create: `public/travel-images/bali.png`
+- Create: `public/travel-images/canadian-rockies-aurora.png`
+- Create: `public/travel-images/hawaii.png`
+- Create: `public/travel-images/shanghai-hangzhou.png`
+- Create: `public/travel-images/cruise.png`
+
+- [ ] **Step 1: Generate destination raster images**
+
+Use the logged-in account image generation path, one image per destination. Generate polished 16:9 travel editorial images with no text, no logos, and no watermarks.
+
+Destination prompts:
+
+```text
+Jeju: photorealistic editorial travel image of Jeju island, coastal road, volcanic oreum hills, blue sea, warm daylight, inviting but not crowded, no text, no watermark
+Busan: photorealistic editorial travel image of Busan, ocean skyline, Gwangan bridge feeling, lively coastal city atmosphere, warm daylight, no text, no watermark
+Gangneung: photorealistic editorial travel image of Gangneung, calm east coast beach, coffee street mood, soft morning light, relaxing domestic trip mood, no text, no watermark
+Gyeongju: photorealistic editorial travel image of Gyeongju, historic Korean hanok and royal tomb landscape, calm cultural travel mood, no text, no watermark
+Seoul: photorealistic editorial travel image of Seoul, modern city with palace and skyline contrast, food and culture city-break mood, no readable signs, no text, no watermark
+Yeosu: photorealistic editorial travel image of Yeosu, southern coast, islands, marina or cable car feeling, romantic ocean evening mood, no text, no watermark
+Sokcho: photorealistic editorial travel image of Sokcho, Seoraksan mountain and east coast atmosphere, fresh nature trip mood, no text, no watermark
+Osaka: photorealistic editorial travel image of Osaka, lively food street and modern city lights, tasteful travel magazine style, no readable signs, no text, no watermark
+Danang: photorealistic editorial travel image of Danang, beach resort, tropical coastline, relaxed family-friendly luxury mood, no text, no watermark
+Taipei: photorealistic editorial travel image of Taipei, night market mood and city skyline, warm food travel atmosphere, no readable signs, no text, no watermark
+Fukuoka: photorealistic editorial travel image of Fukuoka, compact Japanese city, seaside park and food alley mood, short overseas trip feeling, no readable signs, no text, no watermark
+Bangkok: photorealistic editorial travel image of Bangkok, warm city lights, temple silhouette, street food travel mood, no readable signs, no text, no watermark
+Singapore: photorealistic editorial travel image of Singapore, clean futuristic garden city skyline, family-friendly urban travel mood, no text, no watermark
+Bali: photorealistic editorial travel image of Bali, tropical resort, rice terraces or beach, wellness and nature travel mood, no text, no watermark
+Canadian Rockies Aurora: photorealistic editorial travel image of the Canadian Rockies with aurora borealis, snowy mountain lake, premium winter nature travel mood, no text, no watermark
+Hawaii: photorealistic editorial travel image of Hawaii, tropical beach, volcanic landscape, relaxed island resort mood, no text, no watermark
+Shanghai-Hangzhou: photorealistic editorial travel image combining Shanghai modern skyline mood and Hangzhou West Lake elegance, refined China city and culture trip mood, no readable signs, no text, no watermark
+Cruise: photorealistic editorial travel image of a premium cruise ship at sea with elegant deck and ocean sunset, relaxed multi-destination travel mood, no text, no watermark
+```
+
+- [ ] **Step 2: Save assets in the project**
+
+Copy the generated images into:
+
+```text
+public/travel-images/jeju.png
+public/travel-images/busan.png
+public/travel-images/gangneung.png
+public/travel-images/gyeongju.png
+public/travel-images/seoul.png
+public/travel-images/yeosu.png
+public/travel-images/sokcho.png
+public/travel-images/osaka.png
+public/travel-images/danang.png
+public/travel-images/taipei.png
+public/travel-images/fukuoka.png
+public/travel-images/bangkok.png
+public/travel-images/singapore.png
+public/travel-images/bali.png
+public/travel-images/canadian-rockies-aurora.png
+public/travel-images/hawaii.png
+public/travel-images/shanghai-hangzhou.png
+public/travel-images/cruise.png
+```
+
+- [ ] **Step 3: Commit**
+
+Run:
+
+```bash
+git add public/travel-images
+git commit -m "feat: add generated travel destination images"
+```
+
+## Task 3: Implement Recommendation Rules With Tests
 
 **Files:**
 - Create: `src/travel/recommendation.test.ts`
 - Create: `src/travel/recommendation.ts`
+- Modify: `src/travel/types.ts`
 
 - [ ] **Step 1: Write failing recommendation tests**
 
@@ -201,6 +275,7 @@ assert.equal(calculatePerPersonBudget({ adults: 0, children: 0, includesSeniors:
 const recommendations = getRecommendations(baseAnswers);
 assert.equal(recommendations.length, 3);
 assert.equal(recommendations[0].rank, 1);
+assert.ok(recommendations[0].destination.imageUrl.startsWith('/travel-images/'));
 assert.ok(recommendations[0].reasons.length >= 3);
 assert.ok(recommendations[0].budgetRange.includes('1인 예상'));
 assert.ok(recommendations[0].itinerary.length >= 3);
@@ -227,7 +302,28 @@ Expected: FAIL because `src/travel/recommendation.ts` does not exist.
 
 - [ ] **Step 3: Implement recommendation module**
 
-Create `src/travel/recommendation.ts` with deterministic destination data and scoring:
+First modify `src/travel/types.ts` so `DestinationProfile` includes the generated image path:
+
+```ts
+export interface DestinationProfile {
+  id: string;
+  name: string;
+  region: 'domestic' | 'international';
+  summary: string;
+  imageUrl: string;
+  tags: TravelPurpose[];
+  feelings: TravelFeeling[];
+  goodFor: CompanionType[];
+  methods: TravelMethod[];
+  minBudgetPerPerson: number;
+  idealPeriods: TravelPeriod[];
+  movement: MovementTolerance[];
+  accommodations: AccommodationPreference[];
+  itinerary: string[];
+}
+```
+
+Then create `src/travel/recommendation.ts` with deterministic destination data and scoring:
 
 ```ts
 import {
@@ -247,6 +343,7 @@ const destinations: DestinationProfile[] = [
     name: '제주',
     region: 'domestic',
     summary: '자연, 맛집, 렌터카 동선이 잘 맞는 국내 대표 여행지',
+    imageUrl: '/travel-images/jeju.png',
     tags: ['nature', 'food', 'rest', 'children', 'parents'],
     feelings: ['nature', 'rest', 'comfort', 'photo'],
     goodFor: ['partner', 'friends', 'parents', 'family', 'group'],
@@ -262,6 +359,7 @@ const destinations: DestinationProfile[] = [
     name: '부산',
     region: 'domestic',
     summary: '바다, 미식, 도시 산책을 짧은 일정에 담기 좋은 여행지',
+    imageUrl: '/travel-images/busan.png',
     tags: ['food', 'shopping', 'culture', 'parents'],
     feelings: ['food', 'city', 'photo', 'comfort'],
     goodFor: ['alone', 'partner', 'friends', 'parents', 'group'],
@@ -277,6 +375,7 @@ const destinations: DestinationProfile[] = [
     name: '강릉',
     region: 'domestic',
     summary: '바다와 커피, 느긋한 휴식에 강한 국내 여행지',
+    imageUrl: '/travel-images/gangneung.png',
     tags: ['rest', 'food', 'nature', 'parents'],
     feelings: ['rest', 'nature', 'food', 'comfort'],
     goodFor: ['partner', 'friends', 'parents', 'family'],
@@ -292,6 +391,7 @@ const destinations: DestinationProfile[] = [
     name: '오사카',
     region: 'international',
     summary: '짧은 해외 일정으로 미식, 쇼핑, 도시 산책을 즐기기 좋은 곳',
+    imageUrl: '/travel-images/osaka.png',
     tags: ['food', 'shopping', 'culture'],
     feelings: ['food', 'city', 'photo'],
     goodFor: ['alone', 'partner', 'friends', 'group'],
@@ -307,6 +407,7 @@ const destinations: DestinationProfile[] = [
     name: '다낭',
     region: 'international',
     summary: '휴양, 리조트, 가족 여행을 예산 대비 편하게 구성하기 좋은 곳',
+    imageUrl: '/travel-images/danang.png',
     tags: ['rest', 'food', 'children', 'parents', 'nature'],
     feelings: ['rest', 'comfort', 'nature', 'photo'],
     goodFor: ['partner', 'parents', 'family', 'group'],
@@ -322,6 +423,7 @@ const destinations: DestinationProfile[] = [
     name: '타이베이',
     region: 'international',
     summary: '미식, 야시장, 근교 투어를 균형 있게 즐기는 도시 여행지',
+    imageUrl: '/travel-images/taipei.png',
     tags: ['food', 'culture', 'shopping'],
     feelings: ['food', 'city', 'photo'],
     goodFor: ['alone', 'partner', 'friends', 'parents', 'group'],
@@ -454,15 +556,16 @@ Expected: PASS and output `recommendation tests passed`.
 Run:
 
 ```bash
-git add src/travel/recommendation.ts src/travel/recommendation.test.ts
+git add src/travel/types.ts src/travel/recommendation.ts src/travel/recommendation.test.ts
 git commit -m "feat: add travel recommendation rules"
 ```
 
-## Task 3: Implement Coupon Rules With Tests
+## Task 4: Implement Coupon Rules With Tests
 
 **Files:**
 - Create: `src/travel/coupon.test.ts`
 - Create: `src/travel/coupon.ts`
+- Modify: `package.json`
 
 - [ ] **Step 1: Write failing coupon tests**
 
@@ -551,19 +654,37 @@ Run: `npx tsx src/travel/coupon.test.ts`
 
 Expected: PASS and output `coupon tests passed`.
 
-- [ ] **Step 5: Commit**
+- [ ] **Step 5: Add test scripts**
+
+Modify `package.json` scripts to include:
+
+```json
+"test:domain": "tsx src/travel/recommendation.test.ts && tsx src/travel/coupon.test.ts",
+"test": "npm run test:domain && npm run lint"
+```
+
+Keep existing scripts unchanged.
+
+- [ ] **Step 6: Run full domain tests**
+
+Run: `npm test`
+
+Expected: PASS.
+
+- [ ] **Step 7: Commit**
 
 Run:
 
 ```bash
-git add src/travel/coupon.ts src/travel/coupon.test.ts
+git add package.json src/travel/coupon.ts src/travel/coupon.test.ts
 git commit -m "feat: add share coupon rules"
 ```
 
-## Task 4: Build The React Travel Wizard
+## Task 5: Build The React Travel Wizard
 
 **Files:**
 - Replace: `src/App.tsx`
+- Create: `public/ctourlogo.jpg`
 
 - [ ] **Step 1: Replace the app UI**
 
@@ -575,6 +696,8 @@ Replace `src/App.tsx` with a focused questionnaire and results UI. The component
 - Show a progress indicator.
 - Generate TOP 3 recommendations by calling `getRecommendations`.
 - Show common CTA labels for all travel methods.
+- Display the generated destination image for each recommendation using `recommendation.destination.imageUrl`.
+- Display `/ctourlogo.jpg` in a top corner of the program header with alt text `C-Tour`.
 - Provide the `Share and get a discount coupon` action that copies `PROGRAM_SHARE_URL` and displays `CouponResult`.
 
 Use these labels for CTAs:
@@ -615,11 +738,11 @@ Expected: PASS, or fail only for old code if replacement was incomplete. Fix any
 Run:
 
 ```bash
-git add src/App.tsx
+git add src/App.tsx public/ctourlogo.jpg
 git commit -m "feat: build travel recommendation wizard"
 ```
 
-## Task 5: Refresh Global Styling
+## Task 6: Refresh Global Styling
 
 **Files:**
 - Modify: `src/index.css`
@@ -670,7 +793,7 @@ git add src/index.css
 git commit -m "style: refresh travel app foundation"
 ```
 
-## Task 6: Final Verification
+## Task 7: Final Verification
 
 **Files:**
 - Read: `docs/superpowers/specs/2026-05-28-travel-recommendation-storyline-design.md`
@@ -713,12 +836,13 @@ Skip this commit if no documentation changed after implementation begins.
 
 Spec coverage:
 
-- Questionnaire flow is covered by Task 4.
-- Budget and per-person calculation are covered by Task 2.
-- TOP 3 recommendations and mini itineraries are covered by Task 2 and Task 4.
-- Theme-travel higher frequency with neutral CTA labels is covered by Task 2 and Task 4.
-- Share coupon behavior and code format are covered by Task 3 and Task 4.
-- Consultation/booking placement after results is covered by Task 4.
+- Questionnaire flow is covered by Task 5.
+- Budget and per-person calculation are covered by Task 3.
+- TOP 3 recommendations and mini itineraries are covered by Task 3 and Task 5.
+- Generated destination images are covered by Task 2 and displayed in Task 5.
+- Theme-travel higher frequency with neutral CTA labels is covered by Task 3 and Task 5.
+- Share coupon behavior and code format are covered by Task 4 and Task 5.
+- Consultation/booking placement after results is covered by Task 5.
 
 Placeholder scan:
 
@@ -727,5 +851,5 @@ Placeholder scan:
 
 Type consistency:
 
-- `TravelAnswers`, `TravelRecommendation`, and `CouponResult` are defined in Task 1 and reused consistently in Tasks 2-4.
+- `TravelAnswers`, `TravelRecommendation`, and `CouponResult` are defined in Task 1 and reused consistently in Tasks 3-5.
 - `createCoupon`, `copyShareLink`, `getRecommendations`, and `getTravelMethodLabel` are defined before React imports them.
