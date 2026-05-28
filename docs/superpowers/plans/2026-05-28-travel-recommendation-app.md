@@ -461,10 +461,7 @@ const destinationExamples: DestinationProfile[] = [
   },
 ];
 
-const destinations: DestinationProfile[] = [
-  ...destinationExamples,
-  // The real implementation expands this skeleton to every required row in the table above.
-];
+const destinations: DestinationProfile[] = createEveryDestinationFromRequiredTable();
 
 const methodLabel: Record<TravelMethod, string> = {
   independent: '자유여행',
