@@ -74,6 +74,7 @@ export interface DestinationProfile {
   name: string;
   region: 'domestic' | 'international';
   summary: string;
+  imageUrl: string;
   tags: TravelPurpose[];
   feelings: TravelFeeling[];
   goodFor: CompanionType[];
