@@ -304,6 +304,8 @@ Expected: FAIL because `src/travel/recommendation.ts` does not exist.
 
 First modify `src/travel/types.ts` so `DestinationProfile` includes the generated image path:
 
+The following TypeScript block is a scoring and helper-function skeleton. The short destination list inside it is only an abbreviated example for field shape. Do not copy it as the final `destinations` array. The implemented `destinations` array must contain all 18 rows from the table above.
+
 ```ts
 export interface DestinationProfile {
   id: string;
@@ -360,7 +362,7 @@ import {
   TravelRecommendation,
 } from './types';
 
-const destinations: DestinationProfile[] = [
+const destinationExamples: DestinationProfile[] = [
   {
     id: 'jeju',
     name: '제주',
@@ -457,6 +459,11 @@ const destinations: DestinationProfile[] = [
     accommodations: ['location', 'value'],
     itinerary: ['시먼딩과 야시장 미식', '예스진지 또는 온천 근교 코스', '카페와 기념품 쇼핑 후 귀국'],
   },
+];
+
+const destinations: DestinationProfile[] = [
+  ...destinationExamples,
+  // The real implementation expands this skeleton to every required row in the table above.
 ];
 
 const methodLabel: Record<TravelMethod, string> = {
