@@ -58,6 +58,7 @@ const expectedDestinationImages = new Map([
   ['shanghai-hangzhou', '/travel-images/shanghai-hangzhou.png'],
   ['cruise', '/travel-images/cruise.png'],
 ]);
+
 const destinationProfiles = getDestinationProfiles();
 assert.equal(getDestinationCount(), expectedDestinationImages.size);
 assert.equal(destinationProfiles.length, expectedDestinationImages.size);
@@ -72,8 +73,8 @@ for (const destination of destinationProfiles) {
   );
 }
 
-assert.equal(getTravelMethodLabel('theme'), '관심사 중심 테마여행');
-assert.equal(getTravelMethodLabel('public-transit'), '대중교통 여행');
+assert.equal(getTravelMethodLabel('theme'), 'guided theme trip');
+assert.equal(getTravelMethodLabel('public-transit'), 'public transit trip');
 
 const recommendations = getRecommendations(baseAnswers);
 assert.equal(recommendations.length, 3);
@@ -81,7 +82,7 @@ recommendations.forEach((recommendation, index) => {
   assert.equal(recommendation.rank, index + 1);
   assert.ok(recommendation.destination.imageUrl.startsWith('/travel-images/'));
   assert.ok(recommendation.reasons.length >= 3);
-  assert.ok(recommendation.budgetRange.includes('1인 예상'));
+  assert.ok(recommendation.budgetRange.includes('per person'));
   assert.ok(recommendation.itinerary.length >= 1);
 });
 assert.ok(recommendations[0].itinerary.length >= 3);

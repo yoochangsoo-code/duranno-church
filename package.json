@@ -10,12 +10,14 @@
     "preview": "vite preview",
     "clean": "rm -rf dist",
     "lint": "tsc --noEmit",
+    "test:domain": "tsx src/travel/recommendation.test.ts && tsx src/travel/coupon.test.ts",
+    "test": "npm run test:domain && npm run lint",
     "electron:dev": "cross-env NODE_ENV=development electron .",
     "electron:build": "vite build && electron-builder build --win --publish never"
   },
   "build": {
-    "appId": "com.changsoo.broadcast.editor",
-    "productName": "Changsoo's 방송 편집 도우미",
+    "appId": "com.changsoo.travel.recommender",
+    "productName": "Changsoo Travel Recommender",
     "files": [
       "dist/**/*",
       "electron-main.cjs"

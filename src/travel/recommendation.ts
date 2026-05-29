@@ -9,52 +9,52 @@ import type {
 const TOP_RECOMMENDATION_COUNT = 3;
 
 const METHOD_LABELS: Record<TravelMethod, string> = {
-  independent: '자유 여행',
-  package: '패키지 여행',
-  'rental-car': '렌터카 여행',
-  'public-transit': '대중교통 여행',
-  resort: '리조트 여행',
-  theme: '관심사 중심 테마여행',
+  independent: 'independent trip',
+  package: 'package trip',
+  'rental-car': 'rental car trip',
+  'public-transit': 'public transit trip',
+  resort: 'resort stay',
+  theme: 'guided theme trip',
 };
 
 const DESTINATIONS: DestinationProfile[] = [
   {
     id: 'jeju',
-    name: '제주',
+    name: 'Jeju',
     region: 'domestic',
-    summary: '바다, 오름, 카페를 여유 있게 섞기 좋은 국내 대표 휴양지',
+    summary: 'A flexible island route with coast roads, cafes, food, and nature stops.',
     imageUrl: '/travel-images/jeju.png',
     tags: ['rest', 'food', 'nature', 'activity'],
     feelings: ['rest', 'nature', 'photo', 'comfort'],
     goodFor: ['partner', 'family', 'parents', 'friends'],
-    methods: ['rental-car', 'independent', 'package'],
+    methods: ['rental-car', 'theme', 'independent'],
     minBudgetPerPerson: 320000,
     idealPeriods: ['2-night', '3-night', '4-night-plus'],
     movement: ['medium', 'long'],
     accommodations: ['stylish', 'family', 'premium', 'location'],
-    itinerary: ['동쪽 오름 산책', '해안도로 카페', '흑돼지 저녁'],
+    itinerary: ['East Jeju oreum walk', 'Coastal cafe route', 'Local seafood dinner'],
   },
   {
     id: 'busan',
-    name: '부산',
+    name: 'Busan',
     region: 'domestic',
-    summary: '해변, 시장, 도시 야경을 한 번에 즐기는 활기 있는 항구 도시',
+    summary: 'A seaside city trip for food markets, beaches, shopping, and night views.',
     imageUrl: '/travel-images/busan.png',
     tags: ['food', 'shopping', 'culture'],
     feelings: ['city', 'food', 'photo'],
     goodFor: ['alone', 'partner', 'friends', 'family'],
-    methods: ['public-transit', 'independent', 'theme'],
+    methods: ['public-transit', 'theme', 'independent'],
     minBudgetPerPerson: 220000,
     idealPeriods: ['1-night', '2-night', '3-night'],
     movement: ['short', 'medium'],
     accommodations: ['location', 'value', 'stylish'],
-    itinerary: ['해운대 산책', '전포 카페거리', '자갈치 시장 식사'],
+    itinerary: ['Haeundae beach walk', 'Jeonpo cafe street', 'Jagalchi market dinner'],
   },
   {
     id: 'gangneung',
-    name: '강릉',
+    name: 'Gangneung',
     region: 'domestic',
-    summary: '동해 바다와 커피, 한적한 산책 코스가 잘 맞는 휴식 여행지',
+    summary: 'A quiet east-coast break built around coffee, seafood, and relaxed beaches.',
     imageUrl: '/travel-images/gangneung.png',
     tags: ['rest', 'food', 'nature'],
     feelings: ['rest', 'food', 'photo', 'comfort'],
@@ -64,13 +64,13 @@ const DESTINATIONS: DestinationProfile[] = [
     idealPeriods: ['same-day', '1-night', '2-night'],
     movement: ['short', 'medium'],
     accommodations: ['value', 'location', 'stylish'],
-    itinerary: ['안목 커피거리', '경포호 산책', '초당두부 식사'],
+    itinerary: ['Anmok coffee street', 'Gyeongpo beach', 'Chodang tofu meal'],
   },
   {
     id: 'gyeongju',
-    name: '경주',
+    name: 'Gyeongju',
     region: 'domestic',
-    summary: '유적지와 한옥 분위기를 차분하게 둘러보는 문화 여행지',
+    summary: 'A calm cultural route with heritage sites, night scenery, and walkable streets.',
     imageUrl: '/travel-images/gyeongju.png',
     tags: ['culture', 'children', 'parents'],
     feelings: ['city', 'photo', 'comfort'],
@@ -80,13 +80,13 @@ const DESTINATIONS: DestinationProfile[] = [
     idealPeriods: ['1-night', '2-night', '3-night'],
     movement: ['short', 'medium'],
     accommodations: ['location', 'stylish', 'family'],
-    itinerary: ['대릉원 산책', '황리단길 점심', '동궁과 월지 야경'],
+    itinerary: ['Daereungwon walk', 'Hwangnidan-gil lunch', 'Donggung and Wolji night view'],
   },
   {
     id: 'seoul',
-    name: '서울',
+    name: 'Seoul',
     region: 'domestic',
-    summary: '전시, 쇼핑, 맛집 동선을 촘촘하게 구성하기 좋은 대도시 여행지',
+    summary: 'A dense city break for exhibitions, restaurants, shopping, and easy transit.',
     imageUrl: '/travel-images/seoul.png',
     tags: ['culture', 'shopping', 'food'],
     feelings: ['city', 'food', 'photo'],
@@ -96,13 +96,13 @@ const DESTINATIONS: DestinationProfile[] = [
     idealPeriods: ['same-day', '1-night', '2-night'],
     movement: ['short', 'medium', 'long'],
     accommodations: ['location', 'stylish', 'premium', 'value'],
-    itinerary: ['궁궐 또는 전시 관람', '성수동 카페', '한강 야경'],
+    itinerary: ['Palace or gallery visit', 'Seongsu cafe route', 'Night shopping district'],
   },
   {
     id: 'yeosu',
-    name: '여수',
+    name: 'Yeosu',
     region: 'domestic',
-    summary: '남해 바다와 해산물, 야경을 편하게 즐기는 감성 여행지',
+    summary: 'A romantic southern coast trip with seafood, islands, and harbor views.',
     imageUrl: '/travel-images/yeosu.png',
     tags: ['rest', 'food', 'nature'],
     feelings: ['rest', 'food', 'photo'],
@@ -112,13 +112,13 @@ const DESTINATIONS: DestinationProfile[] = [
     idealPeriods: ['1-night', '2-night', '3-night'],
     movement: ['short', 'medium'],
     accommodations: ['location', 'stylish', 'family'],
-    itinerary: ['오동도 산책', '해상 케이블카', '낭만포차 거리'],
+    itinerary: ['Odongdo walk', 'Marine cable car', 'Romantic pocha street'],
   },
   {
     id: 'sokcho',
-    name: '속초',
+    name: 'Sokcho',
     region: 'domestic',
-    summary: '설악산과 동해, 시장 먹거리를 짧은 일정에 담기 좋은 여행지',
+    summary: 'A mountain-and-sea route for short nature breaks and market food.',
     imageUrl: '/travel-images/sokcho.png',
     tags: ['nature', 'food', 'activity'],
     feelings: ['nature', 'food', 'photo'],
@@ -128,29 +128,29 @@ const DESTINATIONS: DestinationProfile[] = [
     idealPeriods: ['same-day', '1-night', '2-night'],
     movement: ['medium', 'long'],
     accommodations: ['value', 'location', 'family'],
-    itinerary: ['설악산 케이블카', '속초중앙시장', '영금정 일몰'],
+    itinerary: ['Seoraksan cable car', 'Sokcho central market', 'Lighthouse observatory'],
   },
   {
     id: 'osaka',
-    name: '오사카',
+    name: 'Osaka',
     region: 'international',
-    summary: '먹거리, 쇼핑, 근교 문화 코스를 균형 있게 넣기 좋은 일본 도시',
+    summary: 'A compact Japan city trip for food, shopping, and nearby cultural day routes.',
     imageUrl: '/travel-images/osaka.png',
     tags: ['food', 'shopping', 'culture'],
     feelings: ['city', 'food', 'photo'],
     goodFor: ['friends', 'partner', 'family'],
-    methods: ['public-transit', 'independent', 'theme'],
+    methods: ['public-transit', 'theme', 'independent'],
     minBudgetPerPerson: 650000,
     idealPeriods: ['2-night', '3-night', '4-night-plus'],
     movement: ['medium', 'long'],
     accommodations: ['location', 'value', 'stylish'],
-    itinerary: ['도톤보리 식도락', '우메다 쇼핑', '교토 또는 나라 근교'],
+    itinerary: ['Dotonbori food walk', 'Umeda shopping', 'Kyoto or Nara day route'],
   },
   {
     id: 'danang',
-    name: '다낭',
+    name: 'Da Nang',
     region: 'international',
-    summary: '가성비 리조트와 해변, 호이안 야경을 함께 즐기는 휴양지',
+    summary: 'A good-value beach and resort trip with Hoi An, rest time, and easy meals.',
     imageUrl: '/travel-images/danang.png',
     tags: ['rest', 'food', 'children'],
     feelings: ['rest', 'comfort', 'photo'],
@@ -160,45 +160,45 @@ const DESTINATIONS: DestinationProfile[] = [
     idealPeriods: ['3-night', '4-night-plus'],
     movement: ['short', 'medium'],
     accommodations: ['family', 'premium', 'value'],
-    itinerary: ['미케비치 휴식', '바나힐 투어', '호이안 올드타운'],
+    itinerary: ['My Khe beach rest', 'Ba Na Hills day trip', 'Hoi An old town evening'],
   },
   {
     id: 'taipei',
-    name: '타이베이',
+    name: 'Taipei',
     region: 'international',
-    summary: '야시장, 온천, 근교 마을을 대중교통으로 다니기 좋은 도시',
+    summary: 'A transit-friendly city trip for night markets, cafes, and nearby old towns.',
     imageUrl: '/travel-images/taipei.png',
     tags: ['food', 'culture', 'shopping'],
     feelings: ['city', 'food', 'comfort'],
     goodFor: ['friends', 'partner', 'alone', 'family'],
-    methods: ['public-transit', 'independent', 'theme'],
+    methods: ['public-transit', 'theme', 'independent'],
     minBudgetPerPerson: 620000,
     idealPeriods: ['2-night', '3-night', '4-night-plus'],
     movement: ['short', 'medium'],
     accommodations: ['location', 'value', 'family'],
-    itinerary: ['용산사 관람', '스린 야시장', '지우펀 근교'],
+    itinerary: ['Ximending and local meal', 'Jiufen day route', 'Raohe night market'],
   },
   {
     id: 'fukuoka',
-    name: '후쿠오카',
+    name: 'Fukuoka',
     region: 'international',
-    summary: '짧은 일정에도 음식과 쇼핑, 온천 근교를 넣기 쉬운 일본 여행지',
+    summary: 'A short Japan escape for ramen, shopping, hot springs, and simple logistics.',
     imageUrl: '/travel-images/fukuoka.png',
     tags: ['food', 'shopping', 'rest'],
     feelings: ['city', 'food', 'comfort'],
     goodFor: ['friends', 'partner', 'parents'],
-    methods: ['public-transit', 'independent', 'theme'],
+    methods: ['public-transit', 'theme', 'independent'],
     minBudgetPerPerson: 580000,
     idealPeriods: ['1-night', '2-night', '3-night'],
     movement: ['short', 'medium'],
     accommodations: ['location', 'value', 'premium'],
-    itinerary: ['하카타 라멘', '텐진 쇼핑', '유후인 당일 코스'],
+    itinerary: ['Hakata ramen route', 'Tenjin shopping', 'Yufuin day course'],
   },
   {
     id: 'bangkok',
-    name: '방콕',
+    name: 'Bangkok',
     region: 'international',
-    summary: '호텔, 마사지, 시장과 사원을 넉넉한 예산 효율로 즐기는 도시',
+    summary: 'A lively city route with hotels, markets, massage, temples, and strong food value.',
     imageUrl: '/travel-images/bangkok.png',
     tags: ['food', 'shopping', 'culture', 'rest'],
     feelings: ['city', 'food', 'comfort'],
@@ -208,13 +208,13 @@ const DESTINATIONS: DestinationProfile[] = [
     idealPeriods: ['3-night', '4-night-plus'],
     movement: ['medium', 'long'],
     accommodations: ['premium', 'location', 'value'],
-    itinerary: ['왕궁과 사원', '짜뚜짝 시장', '루프톱 또는 마사지'],
+    itinerary: ['Grand Palace area', 'Chatuchak or mall shopping', 'Rooftop or massage evening'],
   },
   {
     id: 'singapore',
-    name: '싱가포르',
+    name: 'Singapore',
     region: 'international',
-    summary: '깨끗한 도시 동선과 가족형 관광지가 강한 프리미엄 여행지',
+    summary: 'A clean premium city trip with family attractions and predictable transit.',
     imageUrl: '/travel-images/singapore.png',
     tags: ['children', 'shopping', 'food', 'culture'],
     feelings: ['city', 'comfort', 'photo'],
@@ -224,13 +224,13 @@ const DESTINATIONS: DestinationProfile[] = [
     idealPeriods: ['3-night', '4-night-plus'],
     movement: ['short', 'medium'],
     accommodations: ['family', 'premium', 'location'],
-    itinerary: ['가든스 바이 더 베이', '센토사', '호커센터 식사'],
+    itinerary: ['Gardens by the Bay', 'Sentosa', 'Hawker center meal'],
   },
   {
     id: 'bali',
-    name: '발리',
+    name: 'Bali',
     region: 'international',
-    summary: '풀빌라 휴식과 자연 액티비티를 함께 구성하기 좋은 휴양지',
+    summary: 'A resort and nature trip that pairs villa rest with light activities.',
     imageUrl: '/travel-images/bali.png',
     tags: ['rest', 'nature', 'activity'],
     feelings: ['rest', 'nature', 'comfort', 'photo'],
@@ -240,13 +240,13 @@ const DESTINATIONS: DestinationProfile[] = [
     idealPeriods: ['4-night-plus', '3-night'],
     movement: ['medium', 'long'],
     accommodations: ['premium', 'stylish', 'family'],
-    itinerary: ['우붓 논뷰 산책', '비치클럽 휴식', '스파 예약'],
+    itinerary: ['Ubud villa rest', 'Beach club afternoon', 'Spa booking'],
   },
   {
     id: 'canadian-rockies-aurora',
-    name: '캐나다 로키 오로라',
+    name: 'Canadian Rockies and Aurora',
     region: 'international',
-    summary: '대자연 드라이브와 오로라 관측을 목표로 하는 장거리 테마 여행',
+    summary: 'A long-haul nature theme trip for dramatic scenery and aurora viewing.',
     imageUrl: '/travel-images/canadian-rockies-aurora.png',
     tags: ['nature', 'activity', 'culture'],
     feelings: ['nature', 'photo'],
@@ -256,13 +256,13 @@ const DESTINATIONS: DestinationProfile[] = [
     idealPeriods: ['4-night-plus'],
     movement: ['long'],
     accommodations: ['premium', 'location'],
-    itinerary: ['밴프 국립공원', '아이스필드 파크웨이', '오로라 관측'],
+    itinerary: ['Banff National Park', 'Icefields Parkway', 'Aurora viewing night'],
   },
   {
     id: 'hawaii',
-    name: '하와이',
+    name: 'Hawaii',
     region: 'international',
-    summary: '해변 휴식, 쇼핑, 액티비티를 안정적으로 조합하는 장거리 휴양지',
+    summary: 'A long-haul beach trip balancing rest, shopping, and soft activities.',
     imageUrl: '/travel-images/hawaii.png',
     tags: ['rest', 'shopping', 'activity'],
     feelings: ['rest', 'photo', 'comfort'],
@@ -272,13 +272,13 @@ const DESTINATIONS: DestinationProfile[] = [
     idealPeriods: ['4-night-plus'],
     movement: ['medium', 'long'],
     accommodations: ['premium', 'family', 'location'],
-    itinerary: ['와이키키 해변', '알라모아나 쇼핑', '오아후 드라이브'],
+    itinerary: ['Waikiki beach', 'Ala Moana shopping', 'Oahu scenic drive'],
   },
   {
     id: 'shanghai-hangzhou',
-    name: '상하이·항저우',
+    name: 'Shanghai and Hangzhou',
     region: 'international',
-    summary: '도시 야경과 수향, 미식 코스를 묶기 좋은 중국 문화 여행지',
+    summary: 'A China city-and-culture route mixing skyline views, food, and classical scenery.',
     imageUrl: '/travel-images/shanghai-hangzhou.png',
     tags: ['culture', 'food', 'shopping'],
     feelings: ['city', 'food', 'photo'],
@@ -288,13 +288,13 @@ const DESTINATIONS: DestinationProfile[] = [
     idealPeriods: ['3-night', '4-night-plus'],
     movement: ['medium', 'long'],
     accommodations: ['location', 'premium', 'value'],
-    itinerary: ['와이탄 야경', '예원 산책', '항저우 서호'],
+    itinerary: ['The Bund night view', 'Yu Garden walk', 'West Lake day route'],
   },
   {
     id: 'cruise',
-    name: '크루즈',
+    name: 'Cruise',
     region: 'international',
-    summary: '숙박과 이동, 식사가 묶여 부모님 또는 단체 여행에 편한 선택지',
+    summary: 'A low-friction group trip where transport, meals, and entertainment stay bundled.',
     imageUrl: '/travel-images/cruise.png',
     tags: ['parents', 'rest', 'food'],
     feelings: ['comfort', 'rest'],
@@ -304,7 +304,7 @@ const DESTINATIONS: DestinationProfile[] = [
     idealPeriods: ['3-night', '4-night-plus'],
     movement: ['short'],
     accommodations: ['premium', 'family'],
-    itinerary: ['승선 후 선내 식사', '기항지 반나절 관광', '공연과 휴식'],
+    itinerary: ['Boarding and cabin check-in', 'Port city excursion', 'Onboard show and dinner'],
   },
 ];
 
@@ -313,11 +313,7 @@ export function calculatePerPersonBudget(
   totalBudget: number,
 ): number {
   const headcount = people.adults + people.children;
-  if (headcount <= 0) {
-    return totalBudget;
-  }
-
-  return Math.floor(totalBudget / headcount);
+  return Math.round(totalBudget / Math.max(1, headcount));
 }
 
 export function getDestinationCount(): number {
@@ -350,50 +346,63 @@ export function selectTravelMethod(
     answers.people,
     answers.totalBudget,
   );
-  const canChooseLowerCostMethod =
-    methods.includes('independent') || methods.includes('public-transit');
-  const isTightBudget = perPersonBudget < 250000;
+  const themeFriendlyCompanion = ['friends', 'group', 'parents'].includes(
+    answers.companion,
+  );
+  const themeFriendlyPurpose = [
+    'culture',
+    'food',
+    'nature',
+    'activity',
+    'parents',
+  ].includes(answers.purpose);
+  const themeFriendlyFeeling = ['city', 'photo', 'nature', 'food'].includes(
+    answers.feeling,
+  );
+  const themeFriendlyPace = answers.pace === 'balanced' || answers.pace === 'relaxed';
 
   if (
     methods.includes('theme') &&
-    !isTightBudget &&
-    isThemeFriendlyTrip(answers)
+    perPersonBudget >= 450000 &&
+    themeFriendlyPace &&
+    (themeFriendlyCompanion || themeFriendlyPurpose || themeFriendlyFeeling)
   ) {
     return 'theme';
   }
 
-  if (isTightBudget && methods.includes('public-transit')) {
+  if (perPersonBudget < 250000 && methods.includes('public-transit')) {
     return 'public-transit';
   }
 
-  if (isTightBudget && methods.includes('independent')) {
+  if (perPersonBudget < 250000 && methods.includes('independent')) {
     return 'independent';
   }
 
-  if (
-    methods.includes('theme') &&
-    !canChooseLowerCostMethod &&
-    !isTightBudget
-  ) {
-    return 'theme';
+  if (answers.accommodation === 'premium' && methods.includes('resort')) {
+    return 'resort';
   }
 
-  return (
-    methods.find((method) => preferredMethodOrder(answers).includes(method)) ??
-    methods[0]
-  );
+  if (answers.companion === 'family' && methods.includes('package')) {
+    return 'package';
+  }
+
+  if (answers.movement === 'short' && methods.includes('public-transit')) {
+    return 'public-transit';
+  }
+
+  return methods[0];
 }
 
 export function getRecommendations(
   answers: TravelAnswers,
 ): TravelRecommendation[] {
-  return DESTINATIONS.map((destination, index) => {
+  return DESTINATIONS.map((destination, order) => {
     const method = selectTravelMethod(answers, destination.methods);
     return {
       destination,
       method,
       score: scoreDestination(destination, answers, method),
-      order: index,
+      order,
     };
   })
     .sort((left, right) => right.score - left.score || left.order - right.order)
@@ -405,7 +414,7 @@ export function getRecommendations(
       score,
       reasons: buildReasons(destination, answers, method),
       budgetRange: buildBudgetRange(destination, answers),
-      itinerary: destination.itinerary,
+      itinerary: buildItinerary(destination, answers.period),
     }));
 }
 
@@ -435,7 +444,7 @@ function scoreDestination(
   }
 
   if (method === 'theme') {
-    score += isThemeFriendlyTrip(answers) ? 18 : 5;
+    score += 18;
   }
 
   if (answers.people.includesSeniors && destination.goodFor.includes('parents')) {
@@ -445,63 +454,29 @@ function scoreDestination(
   return score;
 }
 
-function isThemeFriendlyTrip(answers: TravelAnswers): boolean {
-  return (
-    (answers.purpose === 'culture' ||
-      answers.purpose === 'parents' ||
-      answers.companion === 'group') &&
-    answers.pace !== 'full'
-  );
-}
-
-function preferredMethodOrder(answers: TravelAnswers): TravelMethod[] {
-  if (answers.accommodation === 'premium') {
-    return [
-      'resort',
-      'package',
-      'theme',
-      'rental-car',
-      'public-transit',
-      'independent',
-    ];
-  }
-
-  if (answers.movement === 'short') {
-    return [
-      'public-transit',
-      'resort',
-      'theme',
-      'package',
-      'independent',
-      'rental-car',
-    ];
-  }
-
-  return [
-    'independent',
-    'public-transit',
-    'rental-car',
-    'theme',
-    'package',
-    'resort',
-  ];
-}
-
 function buildReasons(
   destination: DestinationProfile,
   answers: TravelAnswers,
   method: TravelMethod,
 ): string[] {
+  const perPersonBudget = calculatePerPersonBudget(
+    answers.people,
+    answers.totalBudget,
+  );
   const reasons = [
-    `${destination.summary}라서 이번 여행 목적과 잘 맞습니다.`,
-    `${getTravelMethodLabel(method)} 기준으로 동선을 잡으면 ${answers.period} 일정에 무리가 적습니다.`,
-    `숙소는 ${answers.accommodation} 선호에 맞춰 잡기 쉽고, 이동 강도도 ${answers.movement} 수준으로 조절하기 좋습니다.`,
+    `${destination.name} fits your ${answers.purpose} focus and ${answers.feeling} mood.`,
+    `A ${getTravelMethodLabel(method)} keeps the ${answers.period} schedule realistic for your movement preference.`,
+    `Your per-person budget is about ${formatWon(perPersonBudget)}, which is compared against local minimum trip costs.`,
   ];
 
   if (method === 'theme') {
     reasons.push(
-      '관심사에 맞춘 문화 코스와 식사 동선을 함께 묶어 친구들과 흐름이 끊기지 않습니다.',
+      'A themed route groups food, culture, scenery, and photo stops into a clearer story instead of listing unrelated sights.',
     );
+  }
+
+  if (answers.people.includesSeniors) {
+    reasons.push('The route can be paced with shorter transfers and longer rest windows.');
   }
 
   return reasons;
@@ -515,12 +490,25 @@ function buildBudgetRange(
     answers.people,
     answers.totalBudget,
   );
-  const low = destination.minBudgetPerPerson;
+  const low = Math.max(
+    destination.minBudgetPerPerson,
+    Math.round(perPersonBudget * 0.85),
+  );
   const high = Math.max(low + 120000, Math.round(perPersonBudget * 1.1));
 
-  return `1인 예상 ${formatWon(low)}~${formatWon(high)}`;
+  return `per person ${formatWon(low)}-${formatWon(high)}`;
+}
+
+function buildItinerary(
+  destination: DestinationProfile,
+  period: TravelAnswers['period'],
+): string[] {
+  if (period === 'same-day') return destination.itinerary.slice(0, 1);
+  if (period === '1-night') return destination.itinerary.slice(0, 2);
+  if (period === '2-night') return destination.itinerary.slice(0, 3);
+  return destination.itinerary;
 }
 
 function formatWon(amount: number): string {
-  return `${amount.toLocaleString('ko-KR')}원`;
+  return `${amount.toLocaleString('ko-KR')} KRW`;
 }
