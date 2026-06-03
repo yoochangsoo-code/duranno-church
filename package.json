@@ -17,7 +17,7 @@
   },
   "build": {
     "appId": "com.changsoo.travel.recommender",
-    "productName": "Changsoo Travel Recommender",
+    "productName": "여행지 추천",
     "files": [
       "dist/**/*",
       "electron-main.cjs"

@@ -7,37 +7,32 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1280,
     height: 800,
-    title: "Changsoo's 방송 편집 도우미",
+    title: '여행지 추천',
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
-      webSecurity: false, // Allows flexible playback in local file environments
+      webSecurity: false,
     },
-    icon: path.join(__dirname, 'dist', 'favicon.ico')
+    icon: path.join(__dirname, 'dist', 'favicon.ico'),
   });
 
-  // Check if we are running in dev mode or prod mode
   const isDev = process.env.NODE_ENV === 'development';
 
   if (isDev) {
     mainWindow.loadURL('http://localhost:3000');
-    // Open Developer Tools in developer mode
     mainWindow.webContents.openDevTools();
   } else {
-    // Load local built html file
     mainWindow.loadFile(path.join(__dirname, 'dist', 'index.html'));
   }
 
-  // Handle window closed
   mainWindow.on('closed', () => {
     mainWindow = null;
   });
 
-  // Create standard menu template
   const template = [
     {
       label: '새로고침',
-      role: 'reload'
+      role: 'reload',
     },
     {
       label: '편집',
@@ -48,19 +43,19 @@ function createWindow() {
         { label: '잘라내기', role: 'cut' },
         { label: '복사', role: 'copy' },
         { label: '붙여넣기', role: 'paste' },
-        { label: '모두 선택', role: 'selectAll' }
-      ]
+        { label: '모두 선택', role: 'selectAll' },
+      ],
     },
     {
       label: '보기',
       submenu: [
-        { label: '전체화면', role: 'togglefullscreen' },
+        { label: '전체 화면', role: 'togglefullscreen' },
         { label: '개발자 도구', role: 'toggleDevTools' },
         { type: 'separator' },
         { label: '실제 크기', role: 'resetZoom' },
         { label: '확대', role: 'zoomIn' },
-        { label: '축소', role: 'zoomOut' }
-      ]
+        { label: '축소', role: 'zoomOut' },
+      ],
     },
     {
       label: '도움말',
@@ -70,15 +65,16 @@ function createWindow() {
           click: async () => {
             const { dialog } = require('electron');
             dialog.showMessageBox(mainWindow, {
-              title: "이 프로그램 정보",
-              message: "Changsoo's 방송 편집 도우미 v1.0.0",
-              detail: "AI 기반 오디오 분석, 정밀 전사 및 구간 전조율 편집 보조 도구입니다.",
-              buttons: ["확인"]
+              title: '프로그램 정보',
+              message: '여행지 추천 v1.0.0',
+              detail:
+                '여행 취향, 동행, 기간, 예산을 바탕으로 현실적인 여행지와 상담 연결을 제안하는 프로그램입니다.',
+              buttons: ['확인'],
             });
-          }
-        }
-      ]
-    }
+          },
+        },
+      ],
+    },
   ];
 
   const menu = Menu.buildFromTemplate(template);

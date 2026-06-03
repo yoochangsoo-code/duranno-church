@@ -7,7 +7,6 @@ import {
   Gift,
   MapPin,
   MessageCircle,
-  Plane,
   Share2,
   Users,
 } from 'lucide-react';
@@ -31,6 +30,7 @@ import type {
   TravelPace,
   TravelPeriod,
   TravelPurpose,
+  TravelRegionPreference,
 } from './travel/types';
 
 type Option<T extends string> = {
@@ -40,6 +40,7 @@ type Option<T extends string> = {
 };
 
 type StepKey =
+  | 'region'
   | 'mood'
   | 'purpose'
   | 'dates'
@@ -48,6 +49,7 @@ type StepKey =
   | 'style';
 
 const initialAnswers: TravelAnswers = {
+  preferredRegion: 'no-preference',
   feeling: 'rest',
   purpose: 'culture',
   period: '2-night',
@@ -61,100 +63,183 @@ const initialAnswers: TravelAnswers = {
   accommodation: 'location',
 };
 
+const regionLabels: Record<TravelRegionPreference, string> = {
+  domestic: '국내',
+  'southeast-asia': '동남아',
+  china: '중국',
+  japan: '일본',
+  'middle-east': '중동',
+  'other-asia': '기타 아시아',
+  'western-europe': '서유럽',
+  'eastern-europe': '동유럽',
+  americas: '미주',
+  'latin-america': '중남미',
+  oceania: '오세아니아',
+  africa: '아프리카',
+  'no-preference': '원하는 지역 없음',
+};
+
+function getRegionPreferenceText(
+  preferredRegion: TravelRegionPreference,
+): string {
+  return preferredRegion === 'no-preference'
+    ? '지역 선호 없음'
+    : `${regionLabels[preferredRegion]} 선호`;
+}
+
+const feelingLabels: Record<TravelFeeling, string> = {
+  rest: '휴식',
+  food: '미식',
+  city: '도시',
+  nature: '자연',
+  photo: '사진',
+  comfort: '편안함',
+};
+
+const purposeLabels: Record<TravelPurpose, string> = {
+  culture: '문화',
+  food: '미식',
+  shopping: '쇼핑',
+  nature: '자연',
+  activity: '액티비티',
+  children: '아이 동반',
+  parents: '부모님 동반',
+  rest: '휴식',
+};
+
+const periodLabels: Record<TravelPeriod, string> = {
+  'same-day': '당일',
+  '1-night': '1박',
+  '2-night': '2박',
+  '3-night': '3박',
+  '4-night-plus': '4박 이상',
+  custom: '직접 입력',
+};
+
+const companionLabels: Record<CompanionType, string> = {
+  alone: '혼자',
+  partner: '커플',
+  friends: '친구',
+  parents: '부모님',
+  family: '가족',
+  group: '단체',
+};
+
 const steps: { key: StepKey; title: string; subtitle: string }[] = [
   {
+    key: 'region',
+    title: '원하는 지역이 있나요?',
+    subtitle: '선호 지역이 있으면 먼저 반영하고, 없으면 전체 여행지에서 추천합니다.',
+  },
+  {
     key: 'mood',
-    title: 'What should the trip feel like?',
-    subtitle: 'Start with the mood the traveler will remember.',
+    title: '어떤 느낌의 여행을 원하시나요?',
+    subtitle: '여행자가 오래 기억할 분위기부터 정해 보세요.',
   },
   {
     key: 'purpose',
-    title: 'What is the main reason for going?',
-    subtitle: 'This drives destination scoring and the route story.',
+    title: '이번 여행의 가장 큰 목적은 무엇인가요?',
+    subtitle: '목적에 따라 추천 점수와 코스 흐름이 달라집니다.',
   },
   {
     key: 'dates',
-    title: 'How long is the trip?',
-    subtitle: 'Use exact dates if the board needs a real consultation handoff.',
+    title: '여행 기간은 어떻게 되나요?',
+    subtitle: '상담 연결까지 고려한다면 실제 날짜도 함께 입력해 주세요.',
   },
   {
     key: 'people',
-    title: 'Who is traveling?',
-    subtitle: 'Party size controls the per-person budget and movement plan.',
+    title: '누구와 함께 떠나나요?',
+    subtitle: '인원 구성은 1인 예산과 이동 계획에 직접 반영됩니다.',
   },
   {
     key: 'budget',
-    title: 'What budget should we design around?',
-    subtitle: 'Recommendations stay realistic instead of aspirational.',
+    title: '총예산은 어느 정도인가요?',
+    subtitle: '희망만 앞선 추천이 아니라 현실적인 여행지를 고릅니다.',
   },
   {
     key: 'style',
-    title: 'How should the itinerary move?',
-    subtitle: 'Tune pace, transfers, and hotel preference before the TOP 3.',
+    title: '일정은 어떤 방식으로 움직이면 좋을까요?',
+    subtitle: '상위 3곳을 보기 전에 속도, 이동 부담, 숙소 선호를 맞춥니다.',
   },
 ];
 
+const regionOptions: Option<TravelRegionPreference>[] = [
+  { value: 'domestic', label: '국내', note: '제주, 부산, 강릉 등 국내 여행' },
+  { value: 'southeast-asia', label: '동남아', note: '태국, 베트남, 싱가포르, 발리' },
+  { value: 'china', label: '중국', note: '상하이, 항저우, 홍콩, 마카오, 타이베이' },
+  { value: 'japan', label: '일본', note: '오사카, 후쿠오카, 도쿄, 삿포로, 오키나와' },
+  { value: 'middle-east', label: '중동', note: '두바이, 이스탄불 등 이국적인 도시' },
+  { value: 'other-asia', label: '기타 아시아', note: '괌, 사이판, 몰디브, 크루즈' },
+  { value: 'western-europe', label: '서유럽', note: '파리, 로마, 런던, 바르셀로나, 빈' },
+  { value: 'eastern-europe', label: '동유럽', note: '프라하처럼 고풍스러운 유럽 도시' },
+  { value: 'americas', label: '미주', note: '뉴욕, 밴쿠버, 하와이, 캐나다 로키' },
+  { value: 'latin-america', label: '중남미', note: '해당 지역 선호를 우선 고려' },
+  { value: 'oceania', label: '오세아니아', note: '시드니와 남태평양권 여행' },
+  { value: 'africa', label: '아프리카', note: '해당 지역 선호를 우선 고려' },
+  { value: 'no-preference', label: '원하는 지역 없음', note: '전체 여행지에서 균형 있게 추천' },
+];
+
 const feelingOptions: Option<TravelFeeling>[] = [
-  { value: 'rest', label: 'Rest', note: 'Slow reset and quiet stays' },
-  { value: 'food', label: 'Food', note: 'Local meals and market routes' },
-  { value: 'city', label: 'City', note: 'Shopping, galleries, nightlife' },
-  { value: 'nature', label: 'Nature', note: 'Scenery and outdoor stops' },
-  { value: 'photo', label: 'Photo', note: 'Views and memorable locations' },
-  { value: 'comfort', label: 'Comfort', note: 'Simple movement and easy stays' },
+  { value: 'rest', label: '휴식', note: '천천히 쉬고 조용히 머무는 여행' },
+  { value: 'food', label: '미식', note: '현지 음식과 시장을 즐기는 코스' },
+  { value: 'city', label: '도시', note: '쇼핑, 전시, 야경을 담은 일정' },
+  { value: 'nature', label: '자연', note: '풍경과 야외 명소 중심' },
+  { value: 'photo', label: '사진', note: '전망과 기억에 남는 장소' },
+  { value: 'comfort', label: '편안함', note: '이동이 쉽고 숙소가 편한 일정' },
 ];
 
 const purposeOptions: Option<TravelPurpose>[] = [
-  { value: 'culture', label: 'Culture', note: 'History, exhibits, local context' },
-  { value: 'food', label: 'Food', note: 'Restaurants, markets, cafes' },
-  { value: 'shopping', label: 'Shopping', note: 'Brands, outlets, local goods' },
-  { value: 'nature', label: 'Nature', note: 'Coast, mountains, parks' },
-  { value: 'activity', label: 'Activity', note: 'Light adventure and movement' },
-  { value: 'children', label: 'Kids', note: 'Family-friendly attractions' },
-  { value: 'parents', label: 'Parents', note: 'Comfortable senior pacing' },
-  { value: 'rest', label: 'Rest', note: 'Hotels, spas, low pressure' },
+  { value: 'culture', label: '문화', note: '역사, 전시, 현지 맥락' },
+  { value: 'food', label: '미식', note: '식당, 시장, 카페' },
+  { value: 'shopping', label: '쇼핑', note: '브랜드, 아울렛, 로컬 상품' },
+  { value: 'nature', label: '자연', note: '바다, 산, 공원' },
+  { value: 'activity', label: '액티비티', note: '가벼운 모험과 움직임' },
+  { value: 'children', label: '아이 동반', note: '가족 친화 명소' },
+  { value: 'parents', label: '부모님 동반', note: '편안한 어른 맞춤 속도' },
+  { value: 'rest', label: '휴식', note: '호텔, 스파, 낮은 피로도' },
 ];
 
 const periodOptions: Option<TravelPeriod>[] = [
-  { value: 'same-day', label: 'Same day', note: 'One compact route' },
-  { value: '1-night', label: '1 night', note: 'Short domestic escape' },
-  { value: '2-night', label: '2 nights', note: 'Balanced weekend plan' },
-  { value: '3-night', label: '3 nights', note: 'Enough for overseas short haul' },
-  { value: '4-night-plus', label: '4+ nights', note: 'Longer rest or long haul' },
-  { value: 'custom', label: 'Custom', note: 'Use dates as the source of truth' },
+  { value: 'same-day', label: '당일', note: '하루에 담는 압축 코스' },
+  { value: '1-night', label: '1박', note: '짧은 국내 여행' },
+  { value: '2-night', label: '2박', note: '균형 잡힌 주말 계획' },
+  { value: '3-night', label: '3박', note: '단거리 해외도 가능한 기간' },
+  { value: '4-night-plus', label: '4박 이상', note: '긴 휴식 또는 장거리 여행' },
+  { value: 'custom', label: '직접 입력', note: '입력한 날짜를 기준으로 추천' },
 ];
 
 const companionOptions: Option<CompanionType>[] = [
-  { value: 'alone', label: 'Solo', note: 'Flexible and compact' },
-  { value: 'partner', label: 'Couple', note: 'Views, food, hotel quality' },
-  { value: 'friends', label: 'Friends', note: 'Shared interests and energy' },
-  { value: 'parents', label: 'Parents', note: 'Comfort-first movement' },
-  { value: 'family', label: 'Family', note: 'Kid-safe pacing and stays' },
-  { value: 'group', label: 'Group', note: 'Clear route and easy decisions' },
+  { value: 'alone', label: '혼자', note: '유연하고 간결한 일정' },
+  { value: 'partner', label: '커플', note: '전망, 음식, 숙소 퀄리티' },
+  { value: 'friends', label: '친구', note: '함께 즐길 관심사와 에너지' },
+  { value: 'parents', label: '부모님', note: '편안함 우선의 이동' },
+  { value: 'family', label: '가족', note: '아이에게 무리 없는 속도와 숙소' },
+  { value: 'group', label: '단체', note: '명확한 동선과 쉬운 결정' },
 ];
 
 const paceOptions: Option<TravelPace>[] = [
-  { value: 'relaxed', label: 'Relaxed', note: 'Fewer stops, more rest' },
-  { value: 'balanced', label: 'Balanced', note: 'One strong route per day' },
-  { value: 'full', label: 'Full', note: 'Dense schedule, early starts' },
+  { value: 'relaxed', label: '여유롭게', note: '방문지는 줄이고 휴식은 넉넉하게' },
+  { value: 'balanced', label: '균형 있게', note: '하루에 핵심 코스 하나씩' },
+  { value: 'full', label: '알차게', note: '빽빽한 일정과 이른 시작' },
 ];
 
 const movementOptions: Option<MovementTolerance>[] = [
-  { value: 'short', label: 'Short', note: 'Low transfer burden' },
-  { value: 'medium', label: 'Medium', note: 'A practical default' },
-  { value: 'long', label: 'Long', note: 'Open to bigger routes' },
+  { value: 'short', label: '짧게', note: '이동 부담을 낮게' },
+  { value: 'medium', label: '보통', note: '가장 현실적인 기본값' },
+  { value: 'long', label: '길게', note: '넓은 동선도 가능' },
 ];
 
 const accommodationOptions: Option<AccommodationPreference>[] = [
-  { value: 'value', label: 'Value', note: 'Budget-efficient stays' },
-  { value: 'location', label: 'Location', note: 'Near key routes' },
-  { value: 'stylish', label: 'Stylish', note: 'Design-led hotels' },
-  { value: 'family', label: 'Family', note: 'Space and convenience' },
-  { value: 'premium', label: 'Premium', note: 'Resort or higher-end stay' },
+  { value: 'value', label: '가성비', note: '예산 효율이 좋은 숙소' },
+  { value: 'location', label: '위치', note: '핵심 동선 가까이' },
+  { value: 'stylish', label: '감성', note: '디자인이 좋은 호텔' },
+  { value: 'family', label: '가족형', note: '공간과 편의성' },
+  { value: 'premium', label: '프리미엄', note: '리조트 또는 상급 숙소' },
 ];
 
 const consultationLabels = [
-  'Ask about this itinerary and booking',
-  'Request quotes for the TOP 3',
+  '이 일정과 예약 상담하기',
+  '상위 3곳 견적 요청하기',
 ];
 
 function App() {
@@ -201,9 +286,9 @@ function App() {
 
     try {
       await copyShareLink((value) => navigator.clipboard.writeText(value));
-      setShareStatus(`Program link copied: ${PROGRAM_SHARE_URL}`);
+      setShareStatus(`프로그램 링크를 복사했습니다: ${PROGRAM_SHARE_URL}`);
     } catch {
-      setShareStatus(`Copy was blocked. Use this link: ${PROGRAM_SHARE_URL}`);
+      setShareStatus(`복사가 차단되었습니다. 이 링크를 사용하세요: ${PROGRAM_SHARE_URL}`);
     }
   }
 
@@ -217,34 +302,27 @@ function App() {
         />
         <div className="absolute inset-0 bg-black/45" />
         <div className="relative mx-auto flex min-h-[44vh] max-w-6xl flex-col justify-between px-5 py-6 text-white sm:px-8">
-          <nav className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <img
-                src="/ctourlogo.jpg"
-                alt="Changsoo Travel"
-                className="h-10 w-10 rounded-md object-cover"
-              />
-              <span className="text-sm font-bold uppercase tracking-[0.18em]">
-                Changsoo Travel
-              </span>
-            </div>
+          <nav className="flex items-center justify-end">
             <div className="hidden items-center gap-2 rounded-full bg-white/14 px-4 py-2 text-xs font-semibold backdrop-blur sm:flex">
-              <Plane size={16} />
-              Board consultation mode
+              <MessageCircle size={16} />
+              상담 보드 모드
             </div>
           </nav>
           <div className="max-w-3xl pb-3">
             <p className="mb-3 inline-flex items-center gap-2 rounded-full bg-white/16 px-4 py-2 text-sm font-semibold backdrop-blur">
               <MapPin size={16} />
-              TOP 3 realistic travel recommendations
+              현실적인 여행지 상위 3곳 추천
             </p>
             <h1 className="text-4xl font-black leading-tight sm:text-6xl">
-              Match a trip to the traveler, not just the destination.
+              <span className="block">여행지보다 여행자에게</span>
+              <span className="block">먼저 맞춥니다.</span>
             </h1>
             <p className="mt-4 max-w-2xl text-base font-medium text-white/88 sm:text-lg">
-              Answer a guided set of questions, then get three practical routes
-              with budget ranges, mini itineraries, consultation actions, and a
-              share coupon.
+              <span className="block">간단한 질문에 답하면</span>
+              <span className="block">
+                예산 범위와 미니 일정, 상담 연결, 공유 쿠폰까지 담아
+              </span>
+              <span className="block">실용적인 여행 코스 3가지를 추천합니다.</span>
             </p>
           </div>
         </div>
@@ -257,7 +335,7 @@ function App() {
               <div className="mb-6">
                 <div className="mb-3 flex items-center justify-between gap-4 text-sm font-bold text-[#58635b]">
                   <span>
-                    Step {stepIndex + 1} of {steps.length}
+                    {steps.length}단계 중 {stepIndex + 1}단계
                   </span>
                   <span>{progress}%</span>
                 </div>
@@ -275,6 +353,16 @@ function App() {
                   {currentStep.subtitle}
                 </p>
               </div>
+
+              {currentStep.key === 'region' && (
+                <OptionGrid
+                  options={regionOptions}
+                  value={answers.preferredRegion}
+                  onChange={(preferredRegion) =>
+                    updateAnswers({ preferredRegion })
+                  }
+                />
+              )}
 
               {currentStep.key === 'mood' && (
                 <OptionGrid
@@ -300,7 +388,7 @@ function App() {
                     onChange={(period) => updateAnswers({ period })}
                   />
                   <div className="grid gap-4 sm:grid-cols-2">
-                    <Field label="Start date" icon={<CalendarDays size={17} />}>
+                    <Field label="출발일" icon={<CalendarDays size={17} />}>
                       <input
                         type="date"
                         value={answers.startDate}
@@ -310,7 +398,7 @@ function App() {
                         className="field-input"
                       />
                     </Field>
-                    <Field label="End date" icon={<CalendarDays size={17} />}>
+                    <Field label="도착일" icon={<CalendarDays size={17} />}>
                       <input
                         type="date"
                         value={answers.endDate}
@@ -332,7 +420,7 @@ function App() {
                     onChange={(companion) => updateAnswers({ companion })}
                   />
                   <div className="grid gap-4 sm:grid-cols-3">
-                    <Field label="Adults" icon={<Users size={17} />}>
+                    <Field label="성인" icon={<Users size={17} />}>
                       <input
                         type="number"
                         min={0}
@@ -345,7 +433,7 @@ function App() {
                         className="field-input"
                       />
                     </Field>
-                    <Field label="Children" icon={<Users size={17} />}>
+                    <Field label="아동" icon={<Users size={17} />}>
                       <input
                         type="number"
                         min={0}
@@ -368,7 +456,7 @@ function App() {
                         }
                         className="h-5 w-5 accent-[#256f68]"
                       />
-                      <span className="text-sm font-bold">Includes seniors</span>
+                      <span className="text-sm font-bold">어르신 포함</span>
                     </label>
                   </div>
                 </div>
@@ -376,7 +464,7 @@ function App() {
 
               {currentStep.key === 'budget' && (
                 <div className="max-w-xl">
-                  <Field label="Total budget in KRW" icon={<Gift size={17} />}>
+                  <Field label="총예산" icon={<Gift size={17} />}>
                     <input
                       type="number"
                       min={0}
@@ -392,7 +480,7 @@ function App() {
                     />
                   </Field>
                   <p className="mt-3 text-sm font-semibold text-[#657067]">
-                    Current per-person budget:{' '}
+                    현재 1인 예산:{' '}
                     {Math.round(
                       answers.totalBudget /
                         Math.max(
@@ -400,28 +488,28 @@ function App() {
                           answers.people.adults + answers.people.children,
                         ),
                     ).toLocaleString('ko-KR')}{' '}
-                    KRW
+                    원
                   </p>
                 </div>
               )}
 
               {currentStep.key === 'style' && (
                 <div className="space-y-6">
-                  <OptionSection title="Pace">
+                  <OptionSection title="일정 속도">
                     <OptionGrid
                       options={paceOptions}
                       value={answers.pace}
                       onChange={(pace) => updateAnswers({ pace })}
                     />
                   </OptionSection>
-                  <OptionSection title="Movement">
+                  <OptionSection title="이동 거리">
                     <OptionGrid
                       options={movementOptions}
                       value={answers.movement}
                       onChange={(movement) => updateAnswers({ movement })}
                     />
                   </OptionSection>
-                  <OptionSection title="Accommodation">
+                  <OptionSection title="숙소 선호">
                     <OptionGrid
                       options={accommodationOptions}
                       value={answers.accommodation}
@@ -441,14 +529,14 @@ function App() {
                   className="inline-flex h-11 items-center gap-2 rounded-md border border-[#cfd8cc] px-4 text-sm font-bold text-[#35433c] disabled:cursor-not-allowed disabled:opacity-40"
                 >
                   <ArrowLeft size={17} />
-                  Back
+                  이전
                 </button>
                 <button
                   type="button"
                   onClick={nextStep}
                   className="inline-flex h-11 items-center gap-2 rounded-md bg-[#256f68] px-5 text-sm font-bold text-white shadow-sm hover:bg-[#1d5d57]"
                 >
-                  {stepIndex === steps.length - 1 ? 'Show TOP 3' : 'Next'}
+                  {stepIndex === steps.length - 1 ? '상위 3곳 보기' : '다음'}
                   <ArrowRight size={17} />
                 </button>
               </div>
@@ -468,20 +556,24 @@ function App() {
         <aside className="space-y-4">
           <div className="rounded-lg border border-[#dfe5d9] bg-white p-5 shadow-sm">
             <p className="text-xs font-black uppercase tracking-[0.16em] text-[#738075]">
-              Current brief
+              현재 조건
             </p>
             <dl className="mt-4 space-y-3 text-sm">
-              <SummaryRow label="Mood" value={answers.feeling} />
-              <SummaryRow label="Purpose" value={answers.purpose} />
-              <SummaryRow label="Period" value={answers.period} />
-              <SummaryRow label="Companion" value={answers.companion} />
               <SummaryRow
-                label="People"
-                value={`${answers.people.adults} adults, ${answers.people.children} children`}
+                label="지역"
+                value={regionLabels[answers.preferredRegion]}
+              />
+              <SummaryRow label="분위기" value={feelingLabels[answers.feeling]} />
+              <SummaryRow label="목적" value={purposeLabels[answers.purpose]} />
+              <SummaryRow label="기간" value={periodLabels[answers.period]} />
+              <SummaryRow label="동행" value={companionLabels[answers.companion]} />
+              <SummaryRow
+                label="인원"
+                value={`성인 ${answers.people.adults}명, 아동 ${answers.people.children}명`}
               />
               <SummaryRow
-                label="Budget"
-                value={`${answers.totalBudget.toLocaleString('ko-KR')} KRW`}
+                label="예산"
+                value={`${answers.totalBudget.toLocaleString('ko-KR')}원`}
               />
             </dl>
           </div>
@@ -494,7 +586,7 @@ function App() {
             />
             <div className="p-5">
               <p className="text-xs font-black uppercase tracking-[0.16em] text-[#738075]">
-                Live front-runner
+                현재 1순위
               </p>
               <h3 className="mt-2 text-xl font-black">
                 {recommendations[0]?.destination.name}
@@ -571,13 +663,12 @@ function ResultsView({
     <div className="space-y-5">
       <div className="rounded-lg border border-[#dfe5d9] bg-white p-5 shadow-sm sm:p-7">
         <p className="text-xs font-black uppercase tracking-[0.16em] text-[#738075]">
-          Recommended shortlist
+          추천 후보
         </p>
-        <h2 className="mt-2 text-3xl font-black">TOP 3 trips for this brief</h2>
+        <h2 className="mt-2 text-3xl font-black">조건에 맞는 여행지 상위 3곳</h2>
         <p className="mt-2 max-w-2xl text-sm font-medium leading-6 text-[#657067]">
-          These results use the answers, per-person budget, travel pace, and
-          practical movement constraints. Consultation actions stay neutral
-          across trip types.
+          답변, 1인 예산, 일정 속도, 실제 이동 부담을 함께 반영했습니다.
+          상담 연결은 여행 방식과 상관없이 바로 진행할 수 있습니다.
         </p>
       </div>
 
@@ -597,7 +688,7 @@ function ResultsView({
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div>
                     <p className="text-xs font-black uppercase tracking-[0.16em] text-[#738075]">
-                      Rank {recommendation.rank}
+                      {recommendation.rank}위
                     </p>
                     <h3 className="mt-1 text-2xl font-black">
                       {recommendation.destination.name}
@@ -629,12 +720,12 @@ function ResultsView({
 
                 <div className="mt-5 rounded-md bg-[#f7f8f4] p-4">
                   <p className="mb-3 text-xs font-black uppercase tracking-[0.14em] text-[#738075]">
-                    Mini itinerary
+                    미니 일정
                   </p>
                   <ol className="grid gap-2 text-sm font-bold text-[#35433c] sm:grid-cols-3">
                     {recommendation.itinerary.map((item, index) => (
                       <li key={item} className="flex gap-2">
-                        <span className="text-[#256f68]">D{index + 1}</span>
+                        <span className="text-[#256f68]">{index + 1}일차</span>
                         <span>{item}</span>
                       </li>
                     ))}
@@ -649,7 +740,7 @@ function ResultsView({
       <div className="grid gap-4 md:grid-cols-[1fr_1fr]">
         <div className="rounded-lg border border-[#dfe5d9] bg-white p-5 shadow-sm">
           <p className="text-xs font-black uppercase tracking-[0.16em] text-[#738075]">
-            Consultation
+            상담
           </p>
           <div className="mt-4 grid gap-3">
             {consultationLabels.map((label) => (
@@ -667,7 +758,7 @@ function ResultsView({
 
         <div className="rounded-lg border border-[#dfe5d9] bg-white p-5 shadow-sm">
           <p className="text-xs font-black uppercase tracking-[0.16em] text-[#738075]">
-            Share coupon
+            공유 쿠폰
           </p>
           <button
             type="button"
@@ -675,13 +766,13 @@ function ResultsView({
             className="mt-4 inline-flex h-12 w-full items-center justify-center gap-2 rounded-md bg-[#f0a83b] px-4 text-sm font-black text-[#201307] hover:bg-[#dc9429]"
           >
             <Share2 size={17} />
-            Share and get a discount coupon
+            공유하고 할인 쿠폰 받기
           </button>
           {coupon && (
             <div className="mt-4 rounded-md bg-[#fff8e8] p-4">
               <div className="flex items-center gap-2 text-lg font-black">
                 <Gift size={20} />
-                {coupon.amount.toLocaleString('ko-KR')} KRW coupon
+                {coupon.amount.toLocaleString('ko-KR')}원 쿠폰
               </div>
               <div className="mt-2 inline-flex items-center gap-2 rounded-md bg-white px-3 py-2 font-mono text-sm font-black">
                 <Copy size={15} />
@@ -699,8 +790,9 @@ function ResultsView({
 
       <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-[#dfe5d9] bg-white p-5 shadow-sm">
         <p className="text-sm font-semibold text-[#657067]">
-          Brief saved for {answers.companion} with a{' '}
-          {answers.totalBudget.toLocaleString('ko-KR')} KRW total budget.
+          {getRegionPreferenceText(answers.preferredRegion)},{' '}
+          {companionLabels[answers.companion]} 여행 조건과 총예산{' '}
+          {answers.totalBudget.toLocaleString('ko-KR')}원이 저장되었습니다.
         </p>
         <button
           type="button"
@@ -708,7 +800,7 @@ function ResultsView({
           className="inline-flex h-11 items-center gap-2 rounded-md border border-[#cfd8cc] px-4 text-sm font-bold text-[#35433c]"
         >
           <ArrowLeft size={17} />
-          Edit answers
+          답변 수정
         </button>
       </div>
     </div>

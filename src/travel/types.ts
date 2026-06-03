@@ -49,6 +49,21 @@ export type TravelMethod =
   | 'resort'
   | 'theme';
 
+export type TravelRegionPreference =
+  | 'domestic'
+  | 'southeast-asia'
+  | 'china'
+  | 'japan'
+  | 'middle-east'
+  | 'other-asia'
+  | 'western-europe'
+  | 'eastern-europe'
+  | 'americas'
+  | 'latin-america'
+  | 'oceania'
+  | 'africa'
+  | 'no-preference';
+
 export interface PeopleCount {
   adults: number;
   children: number;
@@ -56,6 +71,7 @@ export interface PeopleCount {
 }
 
 export interface TravelAnswers {
+  preferredRegion: TravelRegionPreference;
   feeling: TravelFeeling;
   purpose: TravelPurpose;
   period: TravelPeriod;
@@ -73,6 +89,7 @@ export interface DestinationProfile {
   id: string;
   name: string;
   region: 'domestic' | 'international';
+  regions: TravelRegionPreference[];
   summary: string;
   imageUrl: string;
   tags: TravelPurpose[];

@@ -8,3 +8,8 @@ coverage/
 *.log
 .env*
 !.env.example
+__pycache__/
+*.py[cod]
+outputs/
+/ctourlogo.jpg
+/codex-test/
