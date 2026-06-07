@@ -18,7 +18,8 @@
     "productName": "방송 원고 생성기",
     "files": [
       "dist/**/*",
-      "electron-main.cjs"
+      "electron-main.cjs",
+      "preload.cjs"
     ],
     "directories": {
       "output": "dist-electron"
