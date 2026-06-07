@@ -1,6 +1,6 @@
 const { app, BrowserWindow, Menu, ipcMain, dialog } = require('electron');
 const path = require('path');
-const { exec } = require('child_process');
+const { exec, execFile } = require('child_process');
 const fs = require('fs');
 
 let mainWindow;
@@ -110,11 +110,20 @@ ipcMain.handle('run-agy-prompt', async (event, payload) => {
       model = payload.model || '';
     }
 
-    const escapedPrompt = prompt.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
-    const modelFlag = model ? `--model "${model}" ` : '';
-    exec(`agy ${modelFlag}--print "${escapedPrompt}"`, { encoding: 'utf8' }, (error, stdout, stderr) => {
+    // Resolve agy.exe path
+    const localAppData = process.env.LOCALAPPDATA || path.join(process.env.USERPROFILE || '', 'AppData', 'Local');
+    const defaultAgyPath = path.join(localAppData, 'agy', 'bin', 'agy.exe');
+    const agyCommand = fs.existsSync(defaultAgyPath) ? defaultAgyPath : 'agy';
+
+    const args = [];
+    if (model) {
+      args.push('--model', model);
+    }
+    args.push('--print', prompt);
+
+    execFile(agyCommand, args, { encoding: 'utf8', maxBuffer: 10 * 1024 * 1024 }, (error, stdout, stderr) => {
       if (error) {
-        console.error("agy exec error:", error);
+        console.error("agy execFile error:", error);
         reject(new Error(stderr || error.message));
       } else {
         resolve(stdout);
