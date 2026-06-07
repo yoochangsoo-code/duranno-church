@@ -27,7 +27,7 @@
     "win": {
       "target": "portable",
       "signtoolOptions": {
-        "sign": null
+        "sign": "./no-sign.cjs"
       }
     }
   },

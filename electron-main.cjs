@@ -116,6 +116,7 @@ ipcMain.handle('run-agy-prompt', async (event, payload) => {
     const agyCommand = fs.existsSync(defaultAgyPath) ? defaultAgyPath : 'agy';
 
     const args = [];
+    args.push('--dangerously-skip-permissions');
     if (model) {
       args.push('--model', model);
     }
