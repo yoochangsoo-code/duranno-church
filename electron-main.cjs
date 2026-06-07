@@ -122,14 +122,35 @@ ipcMain.handle('run-agy-prompt', async (event, payload) => {
     }
     args.push('--print', prompt);
 
-    execFile(agyCommand, args, { encoding: 'utf8', maxBuffer: 10 * 1024 * 1024 }, (error, stdout, stderr) => {
+    let stdoutData = '';
+    let stderrData = '';
+
+    const child = execFile(agyCommand, args, { encoding: 'utf8', maxBuffer: 10 * 1024 * 1024 }, (error, stdout, stderr) => {
+      clearTimeout(timeoutId);
       if (error) {
-        console.error("agy execFile error:", error);
-        reject(new Error(stderr || error.message));
+        if (error.killed) {
+          reject(new Error(`CLI 실행 시간 초과 (30초).\n\n[표준 출력]:\n${stdoutData || '(없음)'}\n\n[표준 에러]:\n${stderrData || '(없음)'}`));
+        } else {
+          console.error("agy execFile error:", error);
+          reject(new Error(stderr || error.message));
+        }
       } else {
         resolve(stdout);
       }
     });
+
+    child.stdout.on('data', (data) => {
+      stdoutData += data;
+    });
+
+    child.stderr.on('data', (data) => {
+      stderrData += data;
+    });
+
+    // 30 seconds timeout to prevent indefinite hangs
+    const timeoutId = setTimeout(() => {
+      child.kill();
+    }, 30000);
   });
 });
 
