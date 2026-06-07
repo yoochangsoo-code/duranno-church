@@ -129,14 +129,50 @@ export default function App() {
     }
   };
 
+  const extractJson = (text: string): any => {
+    try {
+      return JSON.parse(text.trim());
+    } catch (e) {
+      // Try parsing standard markdown code block
+      const jsonBlockRegex = /```(?:json)?\s*([\s\S]*?)\s*```/;
+      const match = jsonBlockRegex.exec(text);
+      if (match && match[1]) {
+        try {
+          return JSON.parse(match[1].trim());
+        } catch (e2) {
+          // Ignore
+        }
+      }
+      // Fallback: extract outer { ... }
+      const firstCurly = text.indexOf('{');
+      const lastCurly = text.lastIndexOf('}');
+      if (firstCurly !== -1 && lastCurly !== -1 && lastCurly > firstCurly) {
+        try {
+          return JSON.parse(text.substring(firstCurly, lastCurly + 1).trim());
+        } catch (e3) {
+          // Ignore
+        }
+      }
+      // Fallback: extract outer [ ... ]
+      const firstBracket = text.indexOf('[');
+      const lastBracket = text.lastIndexOf(']');
+      if (firstBracket !== -1 && lastBracket !== -1 && lastBracket > firstBracket) {
+        try {
+          return JSON.parse(text.substring(firstBracket, lastBracket + 1).trim());
+        } catch (e4) {
+          // Ignore
+        }
+      }
+      throw new Error("응답에서 올바른 JSON 블록을 찾을 수 없습니다.");
+    }
+  };
+
   // Helper function to call Gemini (supports both Direct SDK and CLI command fallback)
   const callAI = async (prompt: string, expectJson = false, model: string = selectedModel) => {
     if (useAgyAuth && window.electronAPI) {
       const res = await window.electronAPI.runAgyPrompt({ prompt, model });
       if (expectJson) {
-        // Strip markdown block formatting if present
-        const cleanJson = res.replace(/```json/g, '').replace(/```/g, '').trim();
-        return JSON.parse(cleanJson);
+        return extractJson(res);
       }
       return res;
     } else {
