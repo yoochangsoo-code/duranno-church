@@ -168,8 +168,9 @@ export default function App() {
   };
 
   // Helper function to call Gemini (supports both Direct SDK and CLI command fallback)
-  const callAI = async (prompt: string, expectJson = false, model: string = selectedModel) => {
-    if (useAgyAuth && window.electronAPI) {
+  const callAI = async (prompt: string, expectJson = false, model: string = selectedModel, forceCli?: boolean) => {
+    const activeCli = forceCli !== undefined ? forceCli : useAgyAuth;
+    if (activeCli && window.electronAPI) {
       const res = await window.electronAPI.runAgyPrompt({ prompt, model });
       if (expectJson) {
         return extractJson(res);
@@ -200,7 +201,7 @@ export default function App() {
             ]
           }
         `;
-        const parsed = await callAI(prompt, true, 'gemini-3.5-flash');
+        const parsed = await callAI(prompt, true, 'gemini-3.5-flash', isCliMode);
         setIssues(parsed.issues || []);
       } else {
         localStorage.setItem('user_gemini_api_key', keyToUse);
