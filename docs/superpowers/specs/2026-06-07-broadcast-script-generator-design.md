@@ -8,8 +8,8 @@
 - **데스크톱 런타임**: Electron (Vite 번들링 및 Electron-Builder를 통한 포터블 `.exe` 빌드)
 - **인공지능 SDK**: `@google/genai` (Google Gen AI 공식 SDK)
 - **인공지능 모델**: 
-  - `gemini-1.5-pro` (기본값, 풍성하고 논리적인 글쓰기와 대본 구성에 권장)
-  - `gemini-1.5-flash` (빠른 연산 및 이슈 검색에 사용)
+  - `gemini-3.1-pro` (기본값, 풍성하고 논리적인 글쓰기와 대본 구성에 권장)
+  - `gemini-3.5-flash` (빠른 연산 및 이슈 검색에 사용)
 - **실시간 검색**: Google Search Grounding (`tools: [{ googleSearch: {} }]`)을 통해 실시간 뉴스 기사 및 트렌디한 이슈 10개 수집
 
 ---
@@ -73,15 +73,15 @@ graph TD
 ## 3. Gemini API 프롬프트 엔지니어링 설계
 
 ### A. 실시간 뉴스 기사 검색 및 10대 이슈 추출
-- **API 설정**: `model: gemini-1.5-flash`, `responseMimeType: "application/json"`, `tools: [{ googleSearch: {} }]`
+- **API 설정**: `model: gemini-3.5-flash`, `responseMimeType: "application/json"`, `tools: [{ googleSearch: {} }]`
 - **지침**: 최근 일주일간의 주요 기사를 검색하여 10개의 뜨거운 시사 이슈를 객관적인 배경과 함께 JSON 어레이 형태로 정리하도록 유도합니다.
 
 ### B. 사회 이슈와 성경 사건 매핑
-- **API 설정**: `model: gemini-1.5-pro`, `responseMimeType: "application/json"`
+- **API 설정**: `model: gemini-3.1-pro`, `responseMimeType: "application/json"`
 - **지침**: 단순 키워드 매칭을 넘어, 사회적 갈등(예: 청년 실업, 기후 변화, 인간 소외 등)의 철학적·영적 본질이 성경 속 인물의 고뇌 및 하나님과의 동행 사건과 어떻게 교차하는지 심도 깊은 연관성(4개 이상)을 제시하도록 설계합니다.
 
 ### C. 질문자와 답변자 중심의 20분 대담 대본 구성
-- **API 설정**: `model: gemini-1.5-pro`
+- **API 설정**: `model: gemini-3.1-pro`
 - **지침**: 20분 분량에 걸맞은 대사 분량을 갖추기 위해, 성경 사건의 배경 상황 묘사, 대화의 긴장감, 청취자에게 던지는 메시지를 단계별로 풍부하게 서술하고 구어체(해요/죠/했습니다 등)와 오프닝/클로징 멘트를 명확히 구현합니다.
 
 ---

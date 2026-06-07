@@ -46,7 +46,7 @@ export default function App() {
   const [apiKey, setApiKey] = useState<string>('');
   const [tempApiKey, setTempApiKey] = useState<string>('');
   const [showSettings, setShowSettings] = useState<boolean>(false);
-  const [selectedModel, setSelectedModel] = useState<string>('gemini-1.5-pro');
+  const [selectedModel, setSelectedModel] = useState<string>('gemini-3.1-pro');
 
   // App State Flow
   const [step, setStep] = useState<AppStep>('KEY_INPUT');
@@ -130,9 +130,9 @@ export default function App() {
   };
 
   // Helper function to call Gemini (supports both Direct SDK and CLI command fallback)
-  const callAI = async (prompt: string, expectJson = false) => {
+  const callAI = async (prompt: string, expectJson = false, model: string = selectedModel) => {
     if (useAgyAuth && window.electronAPI) {
-      const res = await window.electronAPI.runAgyPrompt(prompt);
+      const res = await window.electronAPI.runAgyPrompt({ prompt, model });
       if (expectJson) {
         // Strip markdown block formatting if present
         const cleanJson = res.replace(/```json/g, '').replace(/```/g, '').trim();
@@ -164,11 +164,11 @@ export default function App() {
             ]
           }
         `;
-        const parsed = await callAI(prompt, true);
+        const parsed = await callAI(prompt, true, 'gemini-3.5-flash');
         setIssues(parsed.issues || []);
       } else {
         localStorage.setItem('user_gemini_api_key', keyToUse);
-        const fetchedIssues = await geminiService.fetchHottestIssues('gemini-1.5-flash');
+        const fetchedIssues = await geminiService.fetchHottestIssues('gemini-3.5-flash');
         setIssues(fetchedIssues);
       }
     } catch (err: any) {
@@ -529,19 +529,17 @@ export default function App() {
             {useAgyAuth ? 'Antigravity CLI 로그인 사용 중' : 'Gemini API Key 사용 중'}
           </div>
 
-          {!useAgyAuth && (
-            <div className="flex items-center gap-2">
-              <span className="text-xs text-slate-400 font-semibold">사용 모델:</span>
-              <select
-                value={selectedModel}
-                onChange={(e) => setSelectedModel(e.target.value)}
-                className="bg-slate-800 border border-slate-700/80 rounded-lg text-xs px-3 py-1.5 font-medium outline-none text-slate-200 focus:border-indigo-500 transition"
-              >
-                <option value="gemini-1.5-pro">Gemini 1.5 Pro (고품질 글쓰기)</option>
-                <option value="gemini-1.5-flash">Gemini 1.5 Flash (빠른 속도)</option>
-              </select>
-            </div>
-          )}
+          <div className="flex items-center gap-2">
+            <span className="text-xs text-slate-400 font-semibold">사용 모델:</span>
+            <select
+              value={selectedModel}
+              onChange={(e) => setSelectedModel(e.target.value)}
+              className="bg-slate-800 border border-slate-700/80 rounded-lg text-xs px-3 py-1.5 font-medium outline-none text-slate-200 focus:border-indigo-500 transition"
+            >
+              <option value="gemini-3.1-pro">Gemini 3.1 Pro (고품질 글쓰기)</option>
+              <option value="gemini-3.5-flash">Gemini 3.5 Flash (빠른 속도)</option>
+            </select>
+          </div>
           
           <button
             onClick={() => setShowSettings(!showSettings)}

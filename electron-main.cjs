@@ -99,10 +99,20 @@ app.on('activate', () => {
 });
 
 // IPC main handlers
-ipcMain.handle('run-agy-prompt', async (event, prompt) => {
+ipcMain.handle('run-agy-prompt', async (event, payload) => {
   return new Promise((resolve, reject) => {
+    let prompt = '';
+    let model = '';
+    if (typeof payload === 'string') {
+      prompt = payload;
+    } else if (payload && typeof payload === 'object') {
+      prompt = payload.prompt || '';
+      model = payload.model || '';
+    }
+
     const escapedPrompt = prompt.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
-    exec(`agy --print "${escapedPrompt}"`, { encoding: 'utf8' }, (error, stdout, stderr) => {
+    const modelFlag = model ? `--model "${model}" ` : '';
+    exec(`agy ${modelFlag}--print "${escapedPrompt}"`, { encoding: 'utf8' }, (error, stdout, stderr) => {
       if (error) {
         console.error("agy exec error:", error);
         reject(new Error(stderr || error.message));

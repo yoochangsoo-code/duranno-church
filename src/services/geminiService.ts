@@ -517,7 +517,7 @@ export const geminiService = {
     });
   },
 
-  async fetchHottestIssues(model: string = "gemini-1.5-flash"): Promise<Issue[]> {
+  async fetchHottestIssues(model: string = "gemini-3.5-flash"): Promise<Issue[]> {
     const currentTime = new Date().toISOString();
     const prompt = `
       현재 시간은 ${currentTime}입니다. Google 검색(Google Search)을 사용하여 최근 뉴스 기사를 찾고, 최근 가장 대중적으로 뜨거운 시사/사회/뉴스 이슈 10개를 선정해주세요.
@@ -553,7 +553,7 @@ export const geminiService = {
     });
   },
 
-  async fetchBiblicalEvents(issueTitle: string, issueSummary: string, model: string = "gemini-1.5-pro"): Promise<BiblicalEvent[]> {
+  async fetchBiblicalEvents(issueTitle: string, issueSummary: string, model: string = "gemini-3.1-pro"): Promise<BiblicalEvent[]> {
     const prompt = `
       최근 핫이슈: '${issueTitle}' (${issueSummary})
       
@@ -600,7 +600,7 @@ export const geminiService = {
     eventTitle: string,
     figureName: string,
     figureDesc: string,
-    model: string = "gemini-1.5-pro"
+    model: string = "gemini-3.1-pro"
   ): Promise<string> {
     const prompt = `
       선택된 사회적 이슈: '${issueTitle}'
@@ -629,7 +629,7 @@ export const geminiService = {
     figureName: string,
     currentArticle: string,
     feedback: string,
-    model: string = "gemini-1.5-pro"
+    model: string = "gemini-3.1-pro"
   ): Promise<string> {
     const prompt = `
       선택된 사회적 이슈: '${issueTitle}'
@@ -663,7 +663,7 @@ export const geminiService = {
     eventTitle: string,
     figureName: string,
     currentArticle: string,
-    model: string = "gemini-1.5-pro"
+    model: string = "gemini-3.1-pro"
   ): Promise<string> {
     const prompt = `
       아래의 본문 내용을 바탕으로, 방송에서 사용할 질문과 답변(Q&A) 형태의 약 20분 분량 방송 원고를 작성해 주세요.
@@ -698,7 +698,7 @@ export const geminiService = {
     figureName: string,
     currentScript: string,
     feedback: string,
-    model: string = "gemini-1.5-pro"
+    model: string = "gemini-3.1-pro"
   ): Promise<string> {
     const prompt = `
       선택된 사회적 이슈: '${issueTitle}'
