@@ -1,5 +1,7 @@
-const { app, BrowserWindow, Menu } = require('electron');
+const { app, BrowserWindow, Menu, ipcMain, dialog } = require('electron');
 const path = require('path');
+const { exec } = require('child_process');
+const fs = require('fs');
 
 let mainWindow;
 
@@ -7,11 +9,12 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1280,
     height: 800,
-    title: '여행지 추천',
+    title: '방송 원고 생성기',
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
       webSecurity: false,
+      preload: path.join(__dirname, 'preload.cjs'),
     },
     icon: path.join(__dirname, 'dist', 'favicon.ico'),
   });
@@ -93,4 +96,31 @@ app.on('activate', () => {
   if (mainWindow === null) {
     createWindow();
   }
+});
+
+// IPC main handlers
+ipcMain.handle('run-agy-prompt', async (event, prompt) => {
+  return new Promise((resolve, reject) => {
+    const escapedPrompt = prompt.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+    exec(`agy --print "${escapedPrompt}"`, { encoding: 'utf8' }, (error, stdout, stderr) => {
+      if (error) {
+        console.error("agy exec error:", error);
+        reject(new Error(stderr || error.message));
+      } else {
+        resolve(stdout);
+      }
+    });
+  });
+});
+
+ipcMain.handle('save-file', async (event, { filename, content }) => {
+  const { filePath } = await dialog.showSaveDialog(mainWindow, {
+    defaultPath: filename,
+    filters: [{ name: 'Text Files', extensions: ['txt'] }]
+  });
+  if (filePath) {
+    fs.writeFileSync(filePath, content, 'utf8');
+    return filePath;
+  }
+  return null;
 });

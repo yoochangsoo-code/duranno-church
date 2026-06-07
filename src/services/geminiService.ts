@@ -1,5 +1,5 @@
 import { GoogleGenAI } from "@google/genai";
-import { ScriptSegment, EditSuggestion } from "../types";
+import { ScriptSegment, EditSuggestion, Issue, BiblicalEvent } from "../types";
 
 const ai = new GoogleGenAI({ 
   apiKey: process.env.GEMINI_API_KEY || "",
@@ -513,6 +513,216 @@ export const geminiService = {
       return response.text || "";
     }).catch(error => {
       console.error("Transcribe Error:", error);
+      throw error;
+    });
+  },
+
+  async fetchHottestIssues(model: string = "gemini-1.5-flash"): Promise<Issue[]> {
+    const currentTime = new Date().toISOString();
+    const prompt = `
+      현재 시간은 ${currentTime}입니다. Google 검색(Google Search)을 사용하여 최근 뉴스 기사를 찾고, 최근 가장 대중적으로 뜨거운 시사/사회/뉴스 이슈 10개를 선정해주세요.
+      각 이슈마다 고유 ID(1~10), 제목(title), 그리고 해당 이슈에 대한 3-4문장 분량의 객관적인 배경 및 설명(summary)을 제공해 주세요.
+      반드시 다음 JSON 포맷으로 응답해야 합니다:
+      {
+        "issues": [
+          {
+            "id": 1,
+            "title": "이슈 제목",
+            "summary": "이슈 설명..."
+          }
+        ]
+      }
+    `;
+
+    return runWithQuotaFallback(async (client) => {
+      const response = await client.models.generateContent({
+        model: model,
+        contents: prompt,
+        config: {
+          responseMimeType: "application/json",
+          tools: [{ googleSearch: {} }],
+        },
+      });
+
+      const text = response.text || "{}";
+      const parsed = JSON.parse(text);
+      return parsed.issues || [];
+    }).catch(error => {
+      console.error("Error fetching hottest issues:", error);
+      throw error;
+    });
+  },
+
+  async fetchBiblicalEvents(issueTitle: string, issueSummary: string, model: string = "gemini-1.5-pro"): Promise<BiblicalEvent[]> {
+    const prompt = `
+      최근 핫이슈: '${issueTitle}' (${issueSummary})
+      
+      이 사회적 이슈와 연관하여 깊이 생각해볼 수 있는 성경 속 사건들을 최대한 많이(최소 4개 이상) 찾아주세요.
+      각 사건에 대한 자세한 설명과 그 사건의 주요 등장인물들에 대한 간략한 설명을 포함해야 합니다.
+      반드시 다음 JSON 포맷으로 응답해야 합니다:
+      {
+        "events": [
+          {
+            "id": 1,
+            "title": "성경 속 사건 제목",
+            "description": "이 사건에 대한 설명 및 이슈와의 연관성/교훈적 고리 설명",
+            "figures": [
+              {
+                "name": "인물 이름",
+                "description": "사건 속에서의 인물 역할 및 특징에 대한 간략한 설명"
+              }
+            ]
+          }
+        ]
+      }
+    `;
+
+    return runWithQuotaFallback(async (client) => {
+      const response = await client.models.generateContent({
+        model: model,
+        contents: prompt,
+        config: {
+          responseMimeType: "application/json",
+        },
+      });
+
+      const text = response.text || "{}";
+      const parsed = JSON.parse(text);
+      return parsed.events || [];
+    }).catch(error => {
+      console.error("Error fetching Biblical events:", error);
+      throw error;
+    });
+  },
+
+  async generateInitialArticle(
+    issueTitle: string,
+    eventTitle: string,
+    figureName: string,
+    figureDesc: string,
+    model: string = "gemini-1.5-pro"
+  ): Promise<string> {
+    const prompt = `
+      선택된 사회적 이슈: '${issueTitle}'
+      선택된 성경 속 사건: '${eventTitle}'
+      주목할 인물: '${figureName}' (${figureDesc})
+      
+      이 인물을 중심으로 성경 속 사건 '${eventTitle}'을 흥미롭고 감동적인 서사로 생생하게 묘사하고, 이를 통해 오늘날 우리가 마주한 이슈 '${issueTitle}'와 관련하여 깊이 성찰하고 배울 점(적용점 및 교훈)을 다루는 완성도 높은 글(해설 에세이)을 작성해 주세요. 문단 구분을 명확히 하고, 정중하고 은혜로운 톤으로 읽기 쉽게 작성해 주세요.
+    `;
+
+    return runWithQuotaFallback(async (client) => {
+      const response = await client.models.generateContent({
+        model: model,
+        contents: prompt,
+      });
+
+      return response.text || "";
+    }).catch(error => {
+      console.error("Error generating initial article:", error);
+      throw error;
+    });
+  },
+
+  async refineArticle(
+    issueTitle: string,
+    eventTitle: string,
+    figureName: string,
+    currentArticle: string,
+    feedback: string,
+    model: string = "gemini-1.5-pro"
+  ): Promise<string> {
+    const prompt = `
+      선택된 사회적 이슈: '${issueTitle}'
+      선택된 성경 속 사건: '${eventTitle}'
+      주목할 인물: '${figureName}'
+      
+      이전 작성된 본문:
+      ${currentArticle}
+      
+      사용자의 피드백/보충 요청 사항:
+      "${feedback}"
+      
+      이 피드백을 깊이 있게 반영하여 인물 '${figureName}'과 사건 '${eventTitle}'을 중심으로 이전 글을 보완/수정하여 다시 작성해 주세요.
+    `;
+
+    return runWithQuotaFallback(async (client) => {
+      const response = await client.models.generateContent({
+        model: model,
+        contents: prompt,
+      });
+
+      return response.text || "";
+    }).catch(error => {
+      console.error("Error refining article:", error);
+      throw error;
+    });
+  },
+
+  async generateScript(
+    issueTitle: string,
+    eventTitle: string,
+    figureName: string,
+    currentArticle: string,
+    model: string = "gemini-1.5-pro"
+  ): Promise<string> {
+    const prompt = `
+      아래의 본문 내용을 바탕으로, 방송에서 사용할 질문과 답변(Q&A) 형태의 약 20분 분량 방송 원고를 작성해 주세요.
+      
+      [본문 내용]
+      ${currentArticle}
+      
+      [작성 규칙]
+      1. 질문자(MC)와 답변자(초대 손님/목회자/전문가)의 2인 대담 형식입니다.
+      2. 질문자는 성경 내용이나 이슈에 대해 어느 정도 사전 지식을 갖추고 있지만, 자신이 직접 설명하기보다는 답변자가 핵심 내용과 은혜로운 이야기를 풍성하게 풀어내고 주도적으로 설명할 수 있도록 이끌고 유도 질문하는 역할을 충실히 수행해야 합니다.
+      3. 답변자는 성경 속 '${eventTitle}' 사건과 인물 '${figureName}'의 흥미진진한 비하인드 스토리부터, 이것이 오늘날의 이슈 '${issueTitle}'를 마주하는 우리에게 주는 교훈과 적용점을 깊이 있고 생생하게 이야기해야 합니다.
+      4. 실제 방송 대본처럼 친근하고 자연스러운 구어체 말투(하십시오/해요/죠 등)를 사용해 오프닝 인사, 중간 리액션, 그리고 감동적인 클로징 멘트까지 포함한 매끄러운 방송 흐름으로 구성해 주세요.
+      5. 분량은 20분 가량 진행할 수 있도록 매우 상세하고 풍성한 대사량으로 구성해 주세요.
+    `;
+
+    return runWithQuotaFallback(async (client) => {
+      const response = await client.models.generateContent({
+        model: model,
+        contents: prompt,
+      });
+
+      return response.text || "";
+    }).catch(error => {
+      console.error("Error generating script:", error);
+      throw error;
+    });
+  },
+
+  async refineScript(
+    issueTitle: string,
+    eventTitle: string,
+    figureName: string,
+    currentScript: string,
+    feedback: string,
+    model: string = "gemini-1.5-pro"
+  ): Promise<string> {
+    const prompt = `
+      선택된 사회적 이슈: '${issueTitle}'
+      선택된 성경 속 사건: '${eventTitle}'
+      주목할 인물: '${figureName}'
+      
+      이전 작성된 방송 원고:
+      ${currentScript}
+      
+      사용자의 피드백/보충 요청 사항:
+      "${feedback}"
+      
+      이 피드백을 반영하여 오프닝, Q&A 내용, 클로징 등을 적절히 보완하고 매끄러운 방송 원고로 다시 작성해 주세요.
+    `;
+
+    return runWithQuotaFallback(async (client) => {
+      const response = await client.models.generateContent({
+        model: model,
+        contents: prompt,
+      });
+
+      return response.text || "";
+    }).catch(error => {
+      console.error("Error refining script:", error);
       throw error;
     });
   }

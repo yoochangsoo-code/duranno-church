@@ -1,7 +1,7 @@
 {
-  "name": "react-example",
+  "name": "broadcast-script-generator",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "main": "electron-main.cjs",
   "scripts": {
@@ -10,14 +10,12 @@
     "preview": "vite preview",
     "clean": "rm -rf dist",
     "lint": "tsc --noEmit",
-    "test:domain": "tsx src/travel/recommendation.test.ts && tsx src/travel/coupon.test.ts",
-    "test": "npm run test:domain && npm run lint",
     "electron:dev": "cross-env NODE_ENV=development electron .",
     "electron:build": "vite build && electron-builder build --win --publish never"
   },
   "build": {
-    "appId": "com.changsoo.travel.recommender",
-    "productName": "여행지 추천",
+    "appId": "com.changsoo.broadcast.script.generator",
+    "productName": "방송 원고 생성기",
     "files": [
       "dist/**/*",
       "electron-main.cjs"

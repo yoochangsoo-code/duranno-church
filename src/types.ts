@@ -22,3 +22,21 @@ export interface ProcessedScript {
   segments: ScriptSegment[];
   total_seconds: number;
 }
+
+export interface Issue {
+  id: number;
+  title: string;
+  summary: string;
+}
+
+export interface BiblicalFigure {
+  name: string;
+  description: string;
+}
+
+export interface BiblicalEvent {
+  id: number;
+  title: string;
+  description: string;
+  figures: BiblicalFigure[];
+}
