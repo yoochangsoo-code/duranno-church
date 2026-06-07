@@ -13,3 +13,5 @@ __pycache__/
 outputs/
 /ctourlogo.jpg
 /codex-test/
+/temp_profile/
+/capture*.png

@@ -98,6 +98,50 @@ app.on('activate', () => {
   }
 });
 
+// Helper to copy credentials and settings to a temporary isolated profile to prevent database lock conflicts
+function prepareIsolatedAgyProfile() {
+  const appDataPath = app.getPath('userData');
+  const tempProfilePath = path.join(appDataPath, 'agy_profile');
+  const tempAgyPath = path.join(tempProfilePath, '.gemini', 'antigravity-cli');
+  
+  const realHome = process.env.USERPROFILE || path.join(process.env.HOMEDRIVE || 'C:', process.env.HOMEPATH || '');
+  const realAgyPath = path.join(realHome, '.gemini', 'antigravity-cli');
+
+  try {
+    if (!fs.existsSync(tempAgyPath)) {
+      fs.mkdirSync(tempAgyPath, { recursive: true });
+    }
+
+    // Copy configuration files without database/history locks
+    const filesToCopy = ['settings.json', 'installation_id'];
+    filesToCopy.forEach(file => {
+      const src = path.join(realAgyPath, file);
+      const dest = path.join(tempAgyPath, file);
+      if (fs.existsSync(src)) {
+        fs.copyFileSync(src, dest);
+      }
+    });
+
+    // Copy implicit credentials folder recursively
+    const srcImplicit = path.join(realAgyPath, 'implicit');
+    const destImplicit = path.join(tempAgyPath, 'implicit');
+    if (fs.existsSync(srcImplicit)) {
+      if (!fs.existsSync(destImplicit)) {
+        fs.mkdirSync(destImplicit, { recursive: true });
+      }
+      const files = fs.readdirSync(srcImplicit);
+      files.forEach(file => {
+        fs.copyFileSync(path.join(srcImplicit, file), path.join(destImplicit, file));
+      });
+    }
+    
+    return tempProfilePath;
+  } catch (err) {
+    console.error("Failed to prepare isolated agy profile:", err);
+    return null;
+  }
+}
+
 // IPC main handlers
 ipcMain.handle('run-agy-prompt', async (event, payload) => {
   return new Promise((resolve, reject) => {
@@ -115,6 +159,15 @@ ipcMain.handle('run-agy-prompt', async (event, payload) => {
     const defaultAgyPath = path.join(localAppData, 'agy', 'bin', 'agy.exe');
     const agyCommand = fs.existsSync(defaultAgyPath) ? defaultAgyPath : 'agy';
 
+    // Set environment variables for the child process to target the isolated home directory
+    const tempProfilePath = prepareIsolatedAgyProfile();
+    const childEnv = { ...process.env };
+    if (tempProfilePath) {
+      childEnv.USERPROFILE = tempProfilePath;
+      childEnv.HOME = tempProfilePath;
+      childEnv.HOMEPATH = tempProfilePath;
+    }
+
     const args = [];
     args.push('--dangerously-skip-permissions');
     if (model) {
@@ -125,7 +178,11 @@ ipcMain.handle('run-agy-prompt', async (event, payload) => {
     let stdoutData = '';
     let stderrData = '';
 
-    const child = execFile(agyCommand, args, { encoding: 'utf8', maxBuffer: 10 * 1024 * 1024 }, (error, stdout, stderr) => {
+    const child = execFile(agyCommand, args, { 
+      encoding: 'utf8', 
+      maxBuffer: 10 * 1024 * 1024,
+      env: childEnv 
+    }, (error, stdout, stderr) => {
       clearTimeout(timeoutId);
       if (error) {
         if (error.killed) {
