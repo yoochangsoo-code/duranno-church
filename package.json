@@ -25,7 +25,10 @@
       "output": "dist-electron"
     },
     "win": {
-      "target": "portable"
+      "target": "portable",
+      "signtoolOptions": {
+        "sign": null
+      }
     }
   },
   "dependencies": {
