@@ -209,9 +209,10 @@ export default function App() {
       }
     } catch (err: any) {
       console.error(err);
+      const detail = err?.message || String(err);
       setError(err?.message?.includes('CUSTOM_KEY_FAILED') 
         ? '입력하신 API Key가 올바르지 않거나 권한이 없습니다. 상단 설정을 확인해 주세요.' 
-        : '최신 뉴스를 가져오는 데 실패했습니다. 네트워크를 확인하거나 나중에 다시 시도해 주세요.');
+        : `최신 뉴스를 가져오는 데 실패했습니다.\n상세 오류: ${detail}`);
     } finally {
       setLoading(false);
     }
@@ -264,7 +265,8 @@ export default function App() {
       }
     } catch (err: any) {
       console.error(err);
-      setError('성경 속 사건을 매핑하는 과정에서 오류가 발생했습니다.');
+      const detail = err?.message || String(err);
+      setError(`성경 속 사건을 매핑하는 과정에서 오류가 발생했습니다.\n상세 오류: ${detail}`);
     } finally {
       setLoading(false);
     }
@@ -306,7 +308,8 @@ export default function App() {
       }
     } catch (err: any) {
       console.error(err);
-      setError('스토리 초안을 생성하는 도중 오류가 발생했습니다.');
+      const detail = err?.message || String(err);
+      setError(`스토리 초안을 생성하는 도중 오류가 발생했습니다.\n상세 오류: ${detail}`);
     } finally {
       setLoading(false);
     }
@@ -348,7 +351,8 @@ export default function App() {
       }
     } catch (err: any) {
       console.error(err);
-      setError('글을 보완하는 도중 오류가 발생했습니다.');
+      const detail = err?.message || String(err);
+      setError(`글을 보완하는 도중 오류가 발생했습니다.\n상세 오류: ${detail}`);
     } finally {
       setLoading(false);
     }
@@ -389,7 +393,8 @@ export default function App() {
       }
     } catch (err: any) {
       console.error(err);
-      setError('방송 원고를 생성하는 도중 오류가 발생했습니다.');
+      const detail = err?.message || String(err);
+      setError(`방송 원고를 생성하는 도중 오류가 발생했습니다.\n상세 오류: ${detail}`);
     } finally {
       setLoading(false);
     }
@@ -431,7 +436,8 @@ export default function App() {
       }
     } catch (err: any) {
       console.error(err);
-      setError('원고를 보완하는 도중 오류가 발생했습니다.');
+      const detail = err?.message || String(err);
+      setError(`원고를 보완하는 도중 오류가 발생했습니다.\n상세 오류: ${detail}`);
     } finally {
       setLoading(false);
     }
@@ -686,7 +692,7 @@ export default function App() {
             <AlertCircle className="h-5 w-5 shrink-0 mt-0.5 text-red-400" />
             <div className="flex-1">
               <p className="font-semibold">문제가 발생했습니다</p>
-              <p className="text-xs text-red-300/90 mt-1 leading-relaxed">{error}</p>
+              <p className="text-xs text-red-300/90 mt-1 leading-relaxed whitespace-pre-line">{error}</p>
             </div>
             <button 
               onClick={() => setError(null)} 
