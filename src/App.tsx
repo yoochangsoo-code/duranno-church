@@ -24,7 +24,7 @@ import type { Issue, BiblicalEvent, BiblicalFigure } from './types';
 declare global {
   interface Window {
     electronAPI?: {
-      runAgyPrompt: (prompt: string) => Promise<string>;
+      runAgyPrompt: (payload: string | { prompt: string; model: string }) => Promise<string>;
       saveFile: (filename: string, content: string) => Promise<string | null>;
     };
   }
