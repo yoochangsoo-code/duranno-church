@@ -10,21 +10,23 @@ export default function HomeView() {
         “너희는 마음에 근심하지 말라 하나님을 믿으니 또 나를 믿으라” (요한복음 14:1)
       </p>
       
-      {/* 표어 배너 */}
+      {/* 표어 배너 (고화질 일러스트 적용) */}
       <div style={{
-        background: 'linear-gradient(135deg, var(--church-navy), var(--church-navy-light))',
+        backgroundImage: 'linear-gradient(rgba(15, 23, 42, 0.45), rgba(15, 23, 42, 0.65)), url("/church-main.jpg")',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
         color: 'var(--church-white)',
         borderRadius: '16px',
-        padding: '50px 30px',
+        padding: '70px 30px',
         textAlign: 'center',
         marginBottom: '50px',
         boxShadow: 'var(--church-shadow-md)'
       }}>
         <span style={{ color: 'var(--church-gold)', fontWeight: 'bold', fontSize: '1.1rem', letterSpacing: '1px' }}>2026년 교회 표어</span>
-        <h3 className="font-serif" style={{ fontSize: '2.2rem', marginTop: '10px', marginBottom: '15px' }}>
+        <h3 className="font-serif" style={{ fontSize: '2.2rem', marginTop: '10px', marginBottom: '15px', color: '#fff' }}>
           소통하고 변화하며 세상을 이롭게 하는 교회
         </h3>
-        <p style={{ opacity: 0.85 }}>에베소서 4장 15-16절</p>
+        <p style={{ opacity: 0.9 }}>에베소서 4장 15-16절</p>
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '30px', marginTop: '40px' }} className="home-grid">

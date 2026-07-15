@@ -14,12 +14,29 @@ export default function AboutView() {
           backgroundColor: 'var(--church-beige-dark)',
           borderRadius: '12px',
           flexShrink: 0,
+          overflow: 'hidden',
           display: 'flex',
           alignItems: 'center',
-          justify: 'center',
-          color: 'var(--church-text-muted)'
+          justifyContent: 'center',
+          boxShadow: 'var(--church-shadow-sm)'
         }}>
-          목사님 프로필 사진
+          <img
+            src="/pastor.jpg"
+            alt="담임목사 프로필"
+            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+            onError={(e) => {
+              e.currentTarget.style.display = 'none';
+              const parent = e.currentTarget.parentElement;
+              if (parent) {
+                parent.innerHTML = `
+                  <div style="text-align: center; color: var(--church-navy); padding: 20px;">
+                    <div style="font-size: 3rem; margin-bottom: 10px;">📖</div>
+                    <div style="font-weight: bold; font-family: var(--font-serif)">홍길동 목사</div>
+                  </div>
+                `;
+              }
+            }}
+          />
         </div>
         <div>
           <h3 className="font-serif" style={{ fontSize: '1.6rem', color: 'var(--church-navy)', marginBottom: '15px' }}>
