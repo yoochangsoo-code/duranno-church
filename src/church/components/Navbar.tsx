@@ -42,7 +42,7 @@ export default function Navbar({
     <nav className="church-navbar">
       <div className="church-container nav-wrapper">
         <a href="#home" className="logo" onClick={() => handleMenuClick('home')}>
-          ⛪ 은혜와평강<span>교회</span>
+          ⛪ 두란노<span>교회</span>
         </a>
 
         {/* 데스크톱 메뉴 */}

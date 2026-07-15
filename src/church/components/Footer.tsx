@@ -7,13 +7,13 @@ export default function Footer() {
         <div className="footer-grid">
           <div>
             <h4 className="font-serif" style={{ fontSize: '1.25rem', letterSpacing: '-0.5px' }}>
-              ⛪ 은혜와평강교회
+              ⛪ 두란노교회
             </h4>
             <p>우리는 오직 성경, 오직 은혜, 오직 믿음으로 하나님께 영광을 돌리는 신앙 공동체입니다.</p>
             <p style={{ marginTop: '15px' }}>
-              담임목사: 홍길동 | 주소: 서울시 은혜구 평강로 123
+              담임목사: 이상문 | 부목사: 남기호 | 주소: 서울시 은혜구 평강로 123
             </p>
-            <p>이메일: contact@gracepeace.or.kr | 대표번호: 02-123-4567</p>
+            <p>이메일: contact@duranno.or.kr | 대표번호: 02-123-4567</p>
           </div>
           
           <div>
@@ -36,7 +36,7 @@ export default function Footer() {
         </div>
 
         <div className="copyright">
-          <p>© 2026 은혜와평강교회. All Rights Reserved. Powered by Antigravity AI.</p>
+          <p>© 2026 두란노교회. All Rights Reserved. Powered by Antigravity AI.</p>
         </div>
       </div>
     </footer>

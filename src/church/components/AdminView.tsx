@@ -17,9 +17,10 @@ export default function AdminView() {
   
   const [feedback, setFeedback] = useState<string | null>(null);
 
-  // 유튜브 API 정보 (실 서버 구동 시 env 활용)
-  const ytChannelId = 'UC_x55gR5_5J9N-t_mock_channel';
-  const ytApiKey = 'AIzaSy_mock_youtube_api_key_123';
+  // 유튜브 API 정보 (두란노교회 유튜브 채널: @durannotv)
+  // 실구축 시 VITE_YOUTUBE_CHANNEL_ID 및 VITE_YOUTUBE_API_KEY 환경변수 활용 가능
+  const ytChannelId = import.meta.env.VITE_YOUTUBE_CHANNEL_ID || 'UC_x55gR5_durannotv_mock';
+  const ytApiKey = import.meta.env.VITE_YOUTUBE_API_KEY || 'AIzaSy_mock_youtube_api_key_123';
   const cryptoSecret = 'church-encryption-key-shared';
 
   // 1. 유튜브 설교 연동 트리거
@@ -27,7 +28,7 @@ export default function AdminView() {
     setSyncLoading(true);
     setFeedback(null);
     try {
-      const res = await syncYouTubeSermons(ytChannelId, ytApiKey, '홍길동 담임목사');
+      const res = await syncYouTubeSermons(ytChannelId, ytApiKey, '이상문 담임목사');
       setFeedback(`유튜브 동기화가 완료되었습니다. (추가된 설교: ${res.addedCount}개)`);
     } catch (err: any) {
       console.error(err);

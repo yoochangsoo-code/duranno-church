@@ -31,7 +31,7 @@ export default function AboutView() {
                 parent.innerHTML = `
                   <div style="text-align: center; color: var(--church-navy); padding: 20px;">
                     <div style="font-size: 3rem; margin-bottom: 10px;">📖</div>
-                    <div style="font-weight: bold; font-family: var(--font-serif)">홍길동 목사</div>
+                    <div style="font-weight: bold; font-family: var(--font-serif)">이상문 목사</div>
                   </div>
                 `;
               }
@@ -40,12 +40,15 @@ export default function AboutView() {
         </div>
         <div>
           <h3 className="font-serif" style={{ fontSize: '1.6rem', color: 'var(--church-navy)', marginBottom: '15px' }}>
-            환영합니다! 담임목사 홍길동입니다.
+            환영합니다! 담임목사 이상문입니다.
           </h3>
           <p style={{ lineHeight: 1.8, color: 'var(--church-text-dark)' }}>
-            우리 은혜와평강교회 홈페이지를 방문해 주신 여러분을 진심으로 환영하고 축복합니다. 
+            우리 두란노교회 홈페이지를 방문해 주신 여러분을 진심으로 환영하고 축복합니다. 
             우리 교회는 하나님의 말씀을 온전히 선포하며, 성령의 충만함 속에서 세상을 향해 사랑과 평강을 흘려보내는 거룩한 소명을 품고 있습니다. 
             매주 선포되는 생명의 말씀과 풍성한 영적 교제를 통해 주님 주시는 평안을 가득 누리시기를 소망합니다.
+          </p>
+          <p style={{ marginTop: '15px', fontSize: '0.9rem', color: 'var(--church-gold)', fontWeight: 'bold' }}>
+            교역자 소개: 담임목사 이상문 | 부목사 남기호
           </p>
         </div>
       </div>
