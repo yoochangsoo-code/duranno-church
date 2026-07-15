@@ -13,6 +13,20 @@ import {
   Volume2
 } from 'lucide-react';
 
+// 교회 홈페이지 관련 컴포넌트 및 CSS 임포트
+import './church/church.css';
+import Navbar from './church/components/Navbar';
+import Footer from './church/components/Footer';
+import HomeView from './church/components/HomeView';
+import AboutView from './church/components/AboutView';
+import SermonView from './church/components/SermonView';
+import BulletinView from './church/components/BulletinView';
+import NoticeView from './church/components/NoticeView';
+import GalleryView from './church/components/GalleryView';
+import OfferingView from './church/components/OfferingView';
+import AuthView from './church/components/AuthView';
+import AdminView from './church/components/AdminView';
+
 interface ProgressData {
   currentFile: string;
   currentIndex: number;
@@ -39,6 +53,7 @@ declare global {
         mode: 'keep' | 'delete';
         startSeconds: number;
         endSeconds: number;
+        volumePercent: number;
       }) => void;
       cancelBatchProcess: () => void;
       onProgress: (callback: (data: ProgressData) => void) => () => void;
@@ -49,6 +64,12 @@ declare global {
 }
 
 export default function App() {
+  // 교회 홈페이지 관련 상태 관리
+  const [appMode, setAppMode] = useState<'audio' | 'church'>('church');
+  const [churchTab, setChurchTab] = useState<string>('home');
+  const [userRole, setUserRole] = useState<string | null>('guest'); // guest, member, manager, admin
+  const [userEmail, setUserEmail] = useState<string | null>(null);
+
   // Folder states
   const [inputDir, setInputDir] = useState<string>('');
   const [outputDir, setOutputDir] = useState<string>('');
@@ -59,9 +80,10 @@ export default function App() {
   // Config states
   const [mode, setMode] = useState<'keep' | 'delete'>('keep');
   const [startMin, setStartMin] = useState<number>(53);
-  const [startSec, setStartSec] = useState<number>(0);
+  const [startSec, setStartSec] = useState<string>('0');
   const [endMin, setEndMin] = useState<number>(57);
-  const [endSec, setEndSec] = useState<number>(45);
+  const [endSec, setEndSec] = useState<string>('45');
+  const [volumePercent, setVolumePercent] = useState<number>(100);
 
   // Execution states
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
@@ -181,8 +203,10 @@ export default function App() {
       return;
     }
 
-    const startSecTotal = startMin * 60 + startSec;
-    const endSecTotal = endMin * 60 + endSec;
+    const startSecNum = parseFloat(startSec) || 0;
+    const endSecNum = parseFloat(endSec) || 0;
+    const startSecTotal = Number((startMin * 60 + startSecNum).toFixed(1));
+    const endSecTotal = Number((endMin * 60 + endSecNum).toFixed(1));
 
     if (startSecTotal >= endSecTotal) {
       setErrorMsg('시작 시간이 종료 시간보다 크거나 같을 수 없습니다.');
@@ -196,6 +220,7 @@ export default function App() {
     setLogs([
       `🚀 일괄 무손실 편집 프로세스 가동`,
       `설정: 구간 ${mode === 'keep' ? '남기기' : '지우기'} (${startMin}분 ${startSec}초 ~ ${endMin}분 ${endSec}초)`,
+      `음량: ${volumePercent}% ${volumePercent === 100 ? '(원본 유지)' : `(${(volumePercent / 100).toFixed(1)}배 조절)`}`,
       `대상 파일 수: ${detectedFiles.length}개`,
       `-----------------------------------------`
     ]);
@@ -211,7 +236,8 @@ export default function App() {
       outputDir,
       mode,
       startSeconds: startSecTotal,
-      endSeconds: endSecTotal
+      endSeconds: endSecTotal,
+      volumePercent
     });
   };
 
@@ -219,6 +245,97 @@ export default function App() {
     if (!isProcessing) return;
     window.electronAPI.cancelBatchProcess();
   };
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    setUserEmail(null);
+    setUserRole('guest');
+    setChurchTab('home');
+  };
+
+  const renderChurchTab = () => {
+    switch (churchTab) {
+      case 'home':
+        return <HomeView />;
+      case 'about':
+        return <AboutView />;
+      case 'sermons':
+        return <SermonView />;
+      case 'bulletins':
+        return <BulletinView userRole={userRole || 'guest'} />;
+      case 'notices':
+        return <NoticeView />;
+      case 'gallery':
+        return <GalleryView />;
+      case 'offering':
+        return <OfferingView />;
+      case 'auth':
+        return (
+          <AuthView
+            onAuthSuccess={(email, role) => {
+              setUserEmail(email);
+              setUserRole(role);
+              setChurchTab('home');
+            }}
+          />
+        );
+      case 'admin':
+        return <AdminView />;
+      default:
+        return <HomeView />;
+    }
+  };
+
+  // 모드 전환 버튼 스타일
+  const modeToggleBtn = (
+    <button
+      onClick={() => setAppMode(appMode === 'church' ? 'audio' : 'church')}
+      style={{
+        position: 'fixed',
+        bottom: '20px',
+        right: '25px',
+        zIndex: 9999,
+        background: 'var(--church-gold, #d97706)',
+        color: '#fff',
+        border: 'none',
+        borderRadius: '50px',
+        padding: '12px 20px',
+        cursor: 'pointer',
+        fontWeight: 'bold',
+        fontSize: '0.85rem',
+        boxShadow: '0 4px 15px rgba(0, 0, 0, 0.25)',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '6px',
+        transition: 'transform 0.2s'
+      }}
+      onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
+      onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1.00)'}
+    >
+      🔄 {appMode === 'church' ? '오디오 트리머로 전환' : '교회 홈페이지로 전환'}
+    </button>
+  );
+
+  if (appMode === 'church') {
+    return (
+      <div className="font-sans" style={{ background: 'var(--church-beige)', minHeight: '100 screen', display: 'flex', flexDirection: 'column' }}>
+        <Navbar
+          currentTab={churchTab}
+          setCurrentTab={setChurchTab}
+          userRole={userRole || 'guest'}
+          userEmail={userEmail}
+          onLogout={handleLogout}
+        />
+        
+        <main style={{ flex: 1, minHeight: '70vh' }}>
+          {renderChurchTab()}
+        </main>
+        
+        <Footer />
+        {modeToggleBtn}
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans select-none antialiased">
@@ -237,7 +354,7 @@ export default function App() {
         </div>
         <div className="flex items-center gap-2">
           <span className="text-[10px] uppercase font-bold tracking-widest text-slate-500 bg-slate-900 border border-slate-800 px-2 py-1 rounded-md">
-            v1.0.0
+            v1.1.0
           </span>
           <span className="text-[10px] uppercase font-bold tracking-widest text-cyan-400 bg-cyan-950/50 border border-cyan-800/30 px-2 py-1 rounded-md">
             FFMPEG ENGINE
@@ -364,15 +481,50 @@ export default function App() {
                       className="w-16 bg-slate-900 border border-slate-800 rounded-lg py-2 px-3 text-center text-lg font-mono font-bold text-slate-100 focus:outline-none focus:border-violet-500"
                     />
                     <span className="text-sm font-medium text-slate-500">분</span>
-                    <input
-                      type="number"
-                      min={0}
-                      max={59}
-                      value={startSec}
-                      onChange={(e) => setStartSec(Math.min(59, Math.max(0, parseInt(e.target.value) || 0)))}
-                      disabled={isProcessing}
-                      className="w-16 bg-slate-900 border border-slate-800 rounded-lg py-2 px-3 text-center text-lg font-mono font-bold text-slate-100 focus:outline-none focus:border-violet-500"
-                    />
+                    <div className="flex items-center gap-1 bg-slate-900 border border-slate-800 rounded-lg p-1">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const current = parseFloat(startSec) || 0;
+                          setStartSec(Math.max(0, Number((current - 0.1).toFixed(1))).toString());
+                        }}
+                        disabled={isProcessing}
+                        className="w-7 h-7 rounded bg-slate-800 hover:bg-slate-700 active:scale-95 transition flex items-center justify-center font-bold text-slate-400 hover:text-slate-200 text-xs select-none cursor-pointer"
+                      >
+                        -
+                      </button>
+                      <input
+                        type="number"
+                        min={0}
+                        max={59.9}
+                        step={0.1}
+                        value={startSec}
+                        onChange={(e) => {
+                          const val = e.target.value;
+                          if (val === '' || /^\d*\.?\d{0,1}$/.test(val)) {
+                            const num = parseFloat(val);
+                            if (!isNaN(num) && num > 59.9) {
+                              setStartSec('59.9');
+                            } else {
+                              setStartSec(val);
+                            }
+                          }
+                        }}
+                        disabled={isProcessing}
+                        className="w-12 bg-transparent border-none text-center text-base font-mono font-bold text-slate-100 focus:outline-none"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const current = parseFloat(startSec) || 0;
+                          setStartSec(Math.min(59.9, Number((current + 0.1).toFixed(1))).toString());
+                        }}
+                        disabled={isProcessing}
+                        className="w-7 h-7 rounded bg-slate-800 hover:bg-slate-700 active:scale-95 transition flex items-center justify-center font-bold text-slate-400 hover:text-slate-200 text-xs select-none cursor-pointer"
+                      >
+                        +
+                      </button>
+                    </div>
                     <span className="text-sm font-medium text-slate-500">초</span>
                   </div>
                 </div>
@@ -391,20 +543,107 @@ export default function App() {
                       className="w-16 bg-slate-900 border border-slate-800 rounded-lg py-2 px-3 text-center text-lg font-mono font-bold text-slate-100 focus:outline-none focus:border-cyan-500"
                     />
                     <span className="text-sm font-medium text-slate-500">분</span>
-                    <input
-                      type="number"
-                      min={0}
-                      max={59}
-                      value={endSec}
-                      onChange={(e) => setEndSec(Math.min(59, Math.max(0, parseInt(e.target.value) || 0)))}
-                      disabled={isProcessing}
-                      className="w-16 bg-slate-900 border border-slate-800 rounded-lg py-2 px-3 text-center text-lg font-mono font-bold text-slate-100 focus:outline-none focus:border-cyan-500"
-                    />
+                    <div className="flex items-center gap-1 bg-slate-900 border border-slate-800 rounded-lg p-1">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const current = parseFloat(endSec) || 0;
+                          setEndSec(Math.max(0, Number((current - 0.1).toFixed(1))).toString());
+                        }}
+                        disabled={isProcessing}
+                        className="w-7 h-7 rounded bg-slate-800 hover:bg-slate-700 active:scale-95 transition flex items-center justify-center font-bold text-slate-400 hover:text-slate-200 text-xs select-none cursor-pointer"
+                      >
+                        -
+                      </button>
+                      <input
+                        type="number"
+                        min={0}
+                        max={59.9}
+                        step={0.1}
+                        value={endSec}
+                        onChange={(e) => {
+                          const val = e.target.value;
+                          if (val === '' || /^\d*\.?\d{0,1}$/.test(val)) {
+                            const num = parseFloat(val);
+                            if (!isNaN(num) && num > 59.9) {
+                              setEndSec('59.9');
+                            } else {
+                              setEndSec(val);
+                            }
+                          }
+                        }}
+                        disabled={isProcessing}
+                        className="w-12 bg-transparent border-none text-center text-base font-mono font-bold text-slate-100 focus:outline-none"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const current = parseFloat(endSec) || 0;
+                          setEndSec(Math.min(59.9, Number((current + 0.1).toFixed(1))).toString());
+                        }}
+                        disabled={isProcessing}
+                        className="w-7 h-7 rounded bg-slate-800 hover:bg-slate-700 active:scale-95 transition flex items-center justify-center font-bold text-slate-400 hover:text-slate-200 text-xs select-none cursor-pointer"
+                      >
+                        +
+                      </button>
+                    </div>
                     <span className="text-sm font-medium text-slate-500">초</span>
                   </div>
                 </div>
 
               </div>
+            </div>
+
+            {/* Volume Settings */}
+            <div className="flex flex-col gap-3 border-t border-slate-850/80 pt-5 mt-2">
+              <div className="flex justify-between items-center">
+                <label className="text-xs text-slate-500 font-semibold flex items-center gap-1.5">
+                  <Volume2 className="h-3.5 w-3.5 text-violet-400" /> 음량 설정 (볼륨 백분율)
+                </label>
+                <div className="flex items-center gap-1 bg-slate-950 px-2.5 py-1 rounded-lg border border-slate-850">
+                  <input
+                    type="number"
+                    min={0}
+                    max={300}
+                    value={volumePercent}
+                    onChange={(e) => {
+                      const val = parseInt(e.target.value);
+                      if (isNaN(val)) setVolumePercent(0);
+                      else setVolumePercent(Math.min(300, Math.max(0, val)));
+                    }}
+                    disabled={isProcessing}
+                    className="w-10 bg-transparent border-none text-right font-mono font-bold text-slate-100 focus:outline-none text-sm"
+                  />
+                  <span className="text-xs font-semibold text-slate-500">%</span>
+                </div>
+              </div>
+              
+              <div className="flex items-center gap-4">
+                <input
+                  type="range"
+                  min="0"
+                  max="300"
+                  step="10"
+                  value={volumePercent}
+                  onChange={(e) => setVolumePercent(parseInt(e.target.value))}
+                  disabled={isProcessing}
+                  className="flex-1 h-1.5 bg-slate-950 rounded-lg appearance-none cursor-pointer accent-violet-500 focus:outline-none"
+                />
+                <span className="text-[11px] font-semibold text-slate-400 w-24 text-right">
+                  {volumePercent === 100 ? (
+                    <span className="text-slate-500 font-medium">💡 원본 음량 유지</span>
+                  ) : volumePercent === 0 ? (
+                    <span className="text-red-400 font-bold">🔇 음소거 (Mute)</span>
+                  ) : volumePercent > 100 ? (
+                    <span className="text-cyan-400 font-bold">🔊 {(volumePercent / 100).toFixed(1)}배 증폭</span>
+                  ) : (
+                    <span className="text-purple-400 font-bold">🔉 {(volumePercent / 100).toFixed(1)}배 감쇄</span>
+                  )}
+                </span>
+              </div>
+              <p className="text-[11px] text-slate-500 leading-relaxed">
+                ※ 음량을 100% 이외로 수정할 경우 오디오 데이터가 **재인코딩**되어 변환 속도가 원본 대비 조금 느려질 수 있습니다.
+              </p>
             </div>
           </div>
 
@@ -541,6 +780,8 @@ export default function App() {
           
         </section>
       </main>
+      {modeToggleBtn}
     </div>
   );
 }
+

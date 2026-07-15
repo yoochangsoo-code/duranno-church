@@ -1,0 +1,245 @@
+/* src/church/church.css */
+/* 교회 홈페이지 전용 디자인 테마 및 반응형 컴포넌트 스타일 */
+
+:root {
+  --church-navy: hsl(220, 45%, 15%);
+  --church-navy-light: hsl(220, 40%, 25%);
+  --church-beige: hsl(35, 30%, 96%);
+  --church-beige-dark: hsl(35, 20%, 88%);
+  --church-gold: hsl(36, 45%, 52%);
+  --church-gold-dark: hsl(36, 50%, 42%);
+  --church-dark: hsl(220, 25%, 12%);
+  --church-text-dark: hsl(220, 20%, 18%);
+  --church-text-muted: hsl(220, 10%, 45%);
+  --church-white: #ffffff;
+  
+  --church-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.05);
+  --church-shadow-md: 0 4px 20px rgba(0, 0, 0, 0.08);
+  
+  --font-serif: 'Gowun Batang', 'Georgia', serif;
+  --font-sans: 'Noto Sans KR', 'Inter', sans-serif;
+}
+
+/* 폰트 적용 클래스 */
+.font-serif {
+  font-family: var(--font-serif);
+}
+
+.font-sans {
+  font-family: var(--font-sans);
+}
+
+/* 레이아웃 컨테이너 */
+.church-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* 버튼 공통 스타일 */
+.church-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 22px;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  border: none;
+  text-decoration: none;
+}
+
+.church-btn-primary {
+  background-color: var(--church-navy);
+  color: var(--church-white);
+}
+
+.church-btn-primary:hover {
+  background-color: var(--church-navy-light);
+  transform: translateY(-1px);
+  box-shadow: var(--church-shadow-sm);
+}
+
+.church-btn-gold {
+  background-color: var(--church-gold);
+  color: var(--church-white);
+}
+
+.church-btn-gold:hover {
+  background-color: var(--church-gold-dark);
+  transform: translateY(-1px);
+  box-shadow: var(--church-shadow-sm);
+}
+
+.church-btn-secondary {
+  background-color: var(--church-beige-dark);
+  color: var(--church-text-dark);
+}
+
+.church-btn-secondary:hover {
+  background-color: hsl(35, 20%, 82%);
+  transform: translateY(-1px);
+}
+
+.church-btn-outline {
+  background-color: transparent;
+  border: 1px solid var(--church-navy);
+  color: var(--church-navy);
+}
+
+.church-btn-outline:hover {
+  background-color: var(--church-navy);
+  color: var(--church-white);
+}
+
+/* 카드 컴포넌트 */
+.church-card {
+  background: var(--church-white);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--church-shadow-sm);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+.church-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--church-shadow-md);
+}
+
+/* 입력 필드 */
+.church-input {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--church-beige-dark);
+  outline: none;
+  font-size: 0.95rem;
+  transition: border-color 0.2s ease;
+  background: var(--church-white);
+}
+
+.church-input:focus {
+  border-color: var(--church-navy);
+}
+
+/* 네비게이션 스타일 */
+.church-navbar {
+  background: var(--church-navy);
+  color: var(--church-white);
+  padding: 16px 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: var(--church-shadow-sm);
+}
+
+.church-navbar .nav-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.church-navbar .logo {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--church-white);
+  text-decoration: none;
+  letter-spacing: -0.5px;
+}
+
+.church-navbar .logo span {
+  color: var(--church-gold);
+}
+
+.church-navbar .nav-menu {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: 28px;
+}
+
+.church-navbar .nav-menu li a {
+  color: hsl(220, 20%, 80%);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.98rem;
+  transition: color 0.2s ease;
+}
+
+.church-navbar .nav-menu li a:hover,
+.church-navbar .nav-menu li a.active {
+  color: var(--church-gold);
+}
+
+.church-navbar .mobile-menu-btn {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--church-white);
+  cursor: pointer;
+  font-size: 1.5rem;
+}
+
+/* 푸터 스타일 */
+.church-footer {
+  background: var(--church-dark);
+  color: hsl(220, 15%, 70%);
+  padding: 60px 0 30px 0;
+  font-size: 0.9rem;
+}
+
+.church-footer .footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 40px;
+  margin-bottom: 40px;
+}
+
+.church-footer h4 {
+  color: var(--church-white);
+  margin-bottom: 20px;
+  font-size: 1.1rem;
+}
+
+.church-footer p {
+  line-height: 1.6;
+  margin: 8px 0;
+}
+
+.church-footer a {
+  color: hsl(220, 15%, 70%);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.church-footer a:hover {
+  color: var(--church-gold);
+}
+
+.church-footer .copyright {
+  text-align: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 24px;
+  font-size: 0.85rem;
+}
+
+/* 반응형 미디어 쿼리 */
+@media (max-width: 768px) {
+  .church-navbar .nav-menu {
+    display: none; /* 모바일 전용 단순 토글 처리는 App/View단에서 구현 */
+  }
+  
+  .church-navbar .mobile-menu-btn {
+    display: block;
+  }
+  
+  .church-footer .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+}
