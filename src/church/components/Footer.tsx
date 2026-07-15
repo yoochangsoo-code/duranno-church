@@ -11,19 +11,18 @@ export default function Footer() {
             </h4>
             <p>우리는 오직 성경, 오직 은혜, 오직 믿음으로 하나님께 영광을 돌리는 신앙 공동체입니다.</p>
             <p style={{ marginTop: '15px' }}>
-              담임목사: 이상문 | 부목사: 남기호 | 주소: 서울시 은혜구 평강로 123
+              담임목사: 이상문 | 부목사: 남기호 | 주소: 경기도 김포시 김포한강4로 123
             </p>
-            <p>이메일: contact@duranno.or.kr | 대표번호: 02-123-4567</p>
+            <p>이메일: info@duranno.org | 대표번호: 031-987-6543</p>
           </div>
           
           <div>
             <h4>예배 안내</h4>
-            <p><strong>주일 대예배</strong>: 오전 11:00 (대예배실)</p>
-            <p><strong>주일 오후예배</strong>: 오후 2:00 (소예배실)</p>
+            <p><strong>주일 3부 대예배</strong>: 오전 11:30 (대예배실)</p>
+            <p><strong>주일 4부 청년예배</strong>: 오후 2:00 (대예배실)</p>
             <p><strong>수요 기도회</strong>: 수요일 오후 7:30 (대예배실)</p>
-            <p><strong>금요 철야기도회</strong>: 금요일 오후 9:00 (대예배실)</p>
+            <p><strong>금요 성령 집회</strong>: 금요일 오후 8:30 (대예배실)</p>
           </div>
-
           <div>
             <h4>주요 링크</h4>
             <ul style={{ listStyle: 'none', padding: '0', margin: '0', display: 'flex', flexDirection: 'column', gap: '8px' }}>

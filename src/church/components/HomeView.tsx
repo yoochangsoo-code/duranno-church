@@ -32,14 +32,27 @@ export default function HomeView() {
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '30px', marginTop: '40px' }} className="home-grid">
         <div className="church-card" style={{ padding: '30px' }}>
           <h4 className="font-serif" style={{ fontSize: '1.4rem', color: 'var(--church-navy)', marginBottom: '15px' }}>주일 예배 안내</h4>
-          <p style={{ margin: '8px 0' }}><strong>1부 예배 (새벽)</strong>: 오전 6:00</p>
-          <p style={{ margin: '8px 0' }}><strong>2부 예배 (오전)</strong>: 오전 9:00</p>
-          <p style={{ margin: '8px 0' }}><strong>3부 예배 (대예배)</strong>: 오전 11:00</p>
+          <p style={{ margin: '8px 0' }}><strong>1부 예배</strong>: 오전 7:30 (대예배실)</p>
+          <p style={{ margin: '8px 0' }}><strong>2부 예배</strong>: 오전 9:30 (대예배실)</p>
+          <p style={{ margin: '8px 0' }}><strong>3부 예배 (대예배)</strong>: 오전 11:30 (대예배실)</p>
+          <p style={{ margin: '8px 0' }}><strong>4부 (청년) 예배</strong>: 오후 2:00 (대예배실)</p>
+          <p style={{ margin: '8px 0' }}><strong>오후 찬양 예배</strong>: 오후 3:30 (대예배실)</p>
         </div>
         
         <div className="church-card" style={{ padding: '30px' }}>
           <h4 className="font-serif" style={{ fontSize: '1.4rem', color: 'var(--church-navy)', marginBottom: '15px' }}>이번 주 핵심 소식</h4>
-          <p style={{ color: 'var(--church-text-muted)' }}>등록된 새로운 공지사항이 아직 없습니다.</p>
+          <ul style={{ paddingLeft: '20px', lineHeight: '1.8', color: 'var(--church-text-dark)', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            <li style={{ listStyleType: 'disc' }}>
+              <strong>[여름 사역] 성경학교 및 수련회</strong>
+              <div style={{ fontSize: '0.85rem', color: 'var(--church-text-muted)', marginLeft: '5px' }}>
+                • 영유아/유치부: 7/18~19 (교육관)<br/>
+                • 유초등부: 7/25~26 (외부)<br/>
+                • 청소년부: 8/1~3 (양평)
+              </div>
+            </li>
+            <li style={{ listStyleType: 'disc' }}><strong>일대일 제자양육 동반자 모집</strong> (행정실 문의)</li>
+            <li style={{ listStyleType: 'disc' }}><strong>주일 주차공간 협소로 대중교통 이용 권장</strong></li>
+          </ul>
         </div>
       </div>
     </div>

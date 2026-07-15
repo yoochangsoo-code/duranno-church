@@ -54,9 +54,41 @@ export default function SermonView() {
       {loading ? (
         <div style={{ textAlign: 'center', padding: '50px 0', color: 'var(--church-text-muted)' }}>설교 영상 목록을 로딩 중입니다...</div>
       ) : sermons.length === 0 ? (
-        <div style={{ textAlign: 'center', padding: '50px 0', color: 'var(--church-text-muted)', border: '1px dashed var(--church-beige-dark)', borderRadius: '12px' }}>
-          <Youtube size={48} style={{ color: 'var(--church-beige-dark)', marginBottom: '15px' }} />
-          <p>등록된 설교 동영상이 아직 없습니다.</p>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '30px' }} className="sermons-grid">
+          {/* 주보 기반 가상 말씀 샘플 카드 */}
+          <div className="church-card" style={{ display: 'flex', flexDirection: 'column' }}>
+            <div
+              style={{
+                position: 'relative',
+                paddingBottom: '56.25%',
+                backgroundColor: 'var(--church-navy-light)',
+                backgroundImage: 'linear-gradient(135deg, var(--church-navy), var(--church-navy-light))',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer'
+              }}
+              onClick={() => setActiveVideo('kFmE1yA1Sjg')}
+            >
+              <div style={{ textAlign: 'center', color: '#fff', padding: '20px', position: 'absolute' }}>
+                <Youtube size={36} style={{ color: 'var(--church-gold)', marginBottom: '8px' }} />
+                <div style={{ fontSize: '0.85rem', opacity: 0.8 }}>예배 실황 다시보기</div>
+              </div>
+            </div>
+            <div style={{ padding: '20px', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+              <div>
+                <span style={{ fontSize: '0.8rem', color: 'var(--church-gold)', fontWeight: 'bold', display: 'block', marginBottom: '8px' }}>
+                  📅 2026-07-12 | 🎙️ 이상문 담임목사
+                </span>
+                <h4 className="font-serif" style={{ fontSize: '1.15rem', color: 'var(--church-navy)', margin: '0 0 10px 0', lineHeight: '1.4' }}>
+                  아무것도 염려하지 말고
+                </h4>
+              </div>
+              <p style={{ margin: '10px 0 0 0', fontSize: '0.88rem', color: 'var(--church-text-muted)', background: 'var(--church-beige)', padding: '6px 12px', borderRadius: '4px' }}>
+                📖 본문: 빌립보서 4장 6-7절
+              </p>
+            </div>
+          </div>
         </div>
       ) : (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '30px' }} className="sermons-grid">

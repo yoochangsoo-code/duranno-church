@@ -3,8 +3,8 @@ import { CreditCard, Heart } from 'lucide-react';
 
 export default function OfferingView() {
   const accounts = [
-    { type: '십일조/감사헌금', bank: '은혜은행', number: '123-456-789012', holder: '은혜와평강교회' },
-    { type: '선교/장학헌금', bank: '평강은행', number: '987-654-321098', holder: '은혜와평강교회' },
+    { type: '십일조 / 감사 / 선교 / 건축 헌금', bank: '농협은행', number: '301-0268-1234-56', holder: '기독교대한성결교회 두란노교회' },
+    { type: '주일 / 감사 / 절기 헌금', bank: '국민은행', number: '284201-04-123456', holder: '두란노교회' },
   ];
 
   return (

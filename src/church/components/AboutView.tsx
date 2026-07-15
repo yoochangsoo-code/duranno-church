@@ -76,6 +76,78 @@ export default function AboutView() {
         </ul>
       </div>
 
+      <div style={{ marginBottom: '60px' }}>
+        <h3 className="font-serif" style={{ fontSize: '1.6rem', color: 'var(--church-navy)', marginBottom: '20px' }}>
+          예배 안내 및 시간표
+        </h3>
+        <div className="church-card" style={{ padding: '25px', overflowX: 'auto' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '500px' }}>
+            <thead>
+              <tr style={{ borderBottom: '2px solid var(--church-gold)', color: 'var(--church-navy)', fontWeight: 'bold' }}>
+                <th style={{ padding: '12px' }}>예배/모임명</th>
+                <th style={{ padding: '12px' }}>시간</th>
+                <th style={{ padding: '12px' }}>장소</th>
+              </tr>
+            </thead>
+            <tbody style={{ color: 'var(--church-text-dark)', lineHeight: '1.6' }}>
+              <tr style={{ borderBottom: '1px solid var(--church-beige-dark)' }}>
+                <td style={{ padding: '12px', fontWeight: 'bold' }}>주일 1부 예배</td>
+                <td style={{ padding: '12px' }}>오전 7시 30분</td>
+                <td style={{ padding: '12px' }}>대예배실</td>
+              </tr>
+              <tr style={{ borderBottom: '1px solid var(--church-beige-dark)' }}>
+                <td style={{ padding: '12px', fontWeight: 'bold' }}>주일 2부 예배</td>
+                <td style={{ padding: '12px' }}>오전 9시 30분</td>
+                <td style={{ padding: '12px' }}>대예배실</td>
+              </tr>
+              <tr style={{ borderBottom: '1px solid var(--church-beige-dark)' }}>
+                <td style={{ padding: '12px', fontWeight: 'bold' }}>주일 3부 예배 (대예배)</td>
+                <td style={{ padding: '12px' }}>오전 11시 30분</td>
+                <td style={{ padding: '12px' }}>대예배실</td>
+              </tr>
+              <tr style={{ borderBottom: '1px solid var(--church-beige-dark)' }}>
+                <td style={{ padding: '12px', fontWeight: 'bold' }}>주일 4부 (청년) 예배</td>
+                <td style={{ padding: '12px' }}>오후 2시 00분</td>
+                <td style={{ padding: '12px' }}>대예배실</td>
+              </tr>
+              <tr style={{ borderBottom: '1px solid var(--church-beige-dark)' }}>
+                <td style={{ padding: '12px', fontWeight: 'bold' }}>오후 찬양 예배</td>
+                <td style={{ padding: '12px' }}>오후 3시 30분</td>
+                <td style={{ padding: '12px' }}>대예배실</td>
+              </tr>
+              <tr style={{ borderBottom: '1px solid var(--church-beige-dark)' }}>
+                <td style={{ padding: '12px', fontWeight: 'bold' }}>수요 기도회</td>
+                <td style={{ padding: '12px' }}>매주 수요일 오후 7시 30분</td>
+                <td style={{ padding: '12px' }}>대예배실</td>
+              </tr>
+              <tr style={{ borderBottom: '1px solid var(--church-beige-dark)' }}>
+                <td style={{ padding: '12px', fontWeight: 'bold' }}>금요 성령 집회</td>
+                <td style={{ padding: '12px' }}>매주 금요일 오후 8시 30분</td>
+                <td style={{ padding: '12px' }}>대예배실</td>
+              </tr>
+              <tr style={{ borderBottom: '1px solid var(--church-beige-dark)' }}>
+                <td style={{ padding: '12px', fontWeight: 'bold' }}>새벽 기도회</td>
+                <td style={{ padding: '12px' }}>월~금 오전 5시 00분 / 토 오전 6시 00분</td>
+                <td style={{ padding: '12px' }}>소예배실</td>
+              </tr>
+              <tr style={{ borderBottom: '2px solid var(--church-gold)' }}>
+                <td style={{ padding: '12px', fontWeight: 'bold' }}>교회학교 (부서별)</td>
+                <td style={{ padding: '12px' }}>
+                  • 영유아유치부: 주일 오전 11:30<br/>
+                  • 유초등부: 주일 오전 11:30<br/>
+                  • 청소년부: 주일 오전 9:30
+                </td>
+                <td style={{ padding: '12px' }}>
+                  • 교육관 1층<br/>
+                  • 교육관 2층<br/>
+                  • 교육관 3층
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
       <div>
         <h3 className="font-serif" style={{ fontSize: '1.6rem', color: 'var(--church-navy)', marginBottom: '20px' }}>
           찾아오시는 길
@@ -91,7 +163,7 @@ export default function AboutView() {
         }}>
           지도 영역 (네이버/구글 맵 임베드 예정)
         </div>
-        <p><strong>주소</strong>: 서울시 은혜구 평강로 123 (지하철 2호선 은혜역 3번 출구 도보 5분)</p>
+        <p><strong>주소</strong>: 경기도 김포시 김포한강4로 123 (두란노교회) | <strong>대표전화</strong>: 031-987-6543</p>
       </div>
     </div>
   );
