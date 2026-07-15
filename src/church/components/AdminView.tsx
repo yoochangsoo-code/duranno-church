@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { syncYouTubeSermons } from '../services/youtubeService';
 import { addBulletin } from '../services/dbService';
 import { supabase } from '../lib/supabaseClient';
+import { sendGroupMessage } from '../services/messageService';
 import { Settings, RefreshCw, Upload, Send, Users } from 'lucide-react';
 
 export default function AdminView() {
@@ -19,6 +20,7 @@ export default function AdminView() {
   // 유튜브 API 정보 (실 서버 구동 시 env 활용)
   const ytChannelId = 'UC_x55gR5_5J9N-t_mock_channel';
   const ytApiKey = 'AIzaSy_mock_youtube_api_key_123';
+  const cryptoSecret = 'church-encryption-key-shared';
 
   // 1. 유튜브 설교 연동 트리거
   const handleSyncSermons = async () => {
@@ -79,11 +81,21 @@ export default function AdminView() {
         return;
       }
 
-      // 2. 메시지 전송 로직 (Solapi 등 발송 API 연동 모방)
-      // 실구축 시 messageService.ts에 정의된 API를 호출하여 안전하게 복호화 및 전송을 수행합니다.
-      const sendCount = users.length;
-      setFeedback(`총 ${sendCount}명의 성도님들에게 공지 문자(알림톡) 발송을 요청했습니다! (테스트 모드 성공)`);
-      setNoticeMessage('');
+      // 2. 메시지 전송 로직 호출 (복호화 및 API 송출 자동화)
+      const encryptedPhones = users.map(u => u.phone_encrypted);
+      const res = await sendGroupMessage(
+        encryptedPhones,
+        cryptoSecret,
+        '02-123-4567', // 교회 발신 대표 번호
+        noticeMessage
+      );
+
+      if (res.success) {
+        setFeedback(`총 ${res.sentCount}명의 성도님들에게 공지 문자(알림톡) 발송을 요청했습니다! (테스트 성공)`);
+        setNoticeMessage('');
+      } else {
+        setFeedback(`발송 오류: ${res.error}`);
+      }
     } catch (err: any) {
       console.error(err);
       setFeedback(`메시지 발송 실패: ${err.message || err}`);
