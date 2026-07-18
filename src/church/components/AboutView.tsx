@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 export default function AboutView() {
   const [activeTab, setActiveTab] = useState<'vision' | 'worship' | 'staff'>('vision');
   const [worshipBranch, setWorshipBranch] = useState<'unyang' | 'banghwa'>('unyang'); // 기본 운양예배당(김포)
-  const [pastorModal, setPastorModal] = useState<'word' | 'details' | null>(null);
 
   // 방화예배당 교역자 명단
   const banghwaStaff = [
@@ -93,14 +92,30 @@ export default function AboutView() {
                 우리 교회는 오직 예수 그리스도의 십자가 복음과 사랑 위에 세워진 건강하고 은혜가 풍성한 신앙 공동체입니다. 
                 매주 선포되는 생명의 말씀과 아름다운 사랑의 교제를 통해 하나님이 주시는 참된 평강과 회복을 누리시길 소망합니다.
               </p>
-              <div style={{ padding: '15px', background: 'var(--church-beige)', borderRadius: '8px', borderLeft: '4px solid var(--church-gold)' }}>
-                <span style={{ fontWeight: 'bold', color: 'var(--church-navy)' }}>📖 담임목사 소개 자료 상세 보기</span><br />
-                <span style={{ fontSize: '0.9rem', color: 'var(--church-text-muted)', display: 'block', marginTop: '5px' }}>
-                  교역자가 직접 올린 공식 인사말 및 세부 약력 이미지를 아래 버튼으로 즉시 확인하실 수 있습니다.<br />
-                  <button onClick={() => setPastorModal('word')} style={{ background: 'none', border: 'none', color: 'var(--church-gold)', textDecoration: 'underline', cursor: 'pointer', padding: 0, fontWeight: 'bold' }}>[담임목사 인사말 보기]</button> | 
-                  <button onClick={() => setPastorModal('details')} style={{ background: 'none', border: 'none', color: 'var(--church-gold)', textDecoration: 'underline', cursor: 'pointer', padding: 0, marginLeft: '8px', fontWeight: 'bold' }}>[담임목사 약력 보기]</button>
-                </span>
-              </div>
+            </div>
+          </div>
+
+          {/* 담임목사 인사말 및 약력 이미지 본문 내장 출력 */}
+          <div style={{ marginTop: '40px', marginBottom: '50px', display: 'flex', flexDirection: 'column', gap: '40px', alignItems: 'center' }} className="pastor-intro-images">
+            <div style={{ width: '100%', maxWidth: '750px', boxShadow: 'var(--church-shadow-md)', borderRadius: '12px', overflow: 'hidden', border: '1px solid var(--church-beige-dark)' }}>
+              <h4 className="font-serif" style={{ backgroundColor: 'var(--church-navy)', color: 'var(--church-white)', padding: '12px 20px', margin: 0, fontSize: '1.1rem', fontWeight: 'bold' }}>
+                📖 담임목사 인사말 원본
+              </h4>
+              <img 
+                src="/ministerWord.jpg" 
+                alt="담임목사 인사말 원본" 
+                style={{ width: '100%', height: 'auto', display: 'block' }}
+              />
+            </div>
+            <div style={{ width: '100%', maxWidth: '750px', boxShadow: 'var(--church-shadow-md)', borderRadius: '12px', overflow: 'hidden', border: '1px solid var(--church-beige-dark)' }}>
+              <h4 className="font-serif" style={{ backgroundColor: 'var(--church-navy)', color: 'var(--church-white)', padding: '12px 20px', margin: 0, fontSize: '1.1rem', fontWeight: 'bold' }}>
+                🎓 담임목사 약력 소개
+              </h4>
+              <img 
+                src="/pastor-details.jpg" 
+                alt="담임목사 약력 소개" 
+                style={{ width: '100%', height: 'auto', display: 'block' }}
+              />
             </div>
           </div>
 
@@ -381,6 +396,22 @@ export default function AboutView() {
           
           <div style={{ marginBottom: '40px' }}>
             <h4 className="font-serif" style={{ fontSize: '1.3rem', color: 'var(--church-gold)', borderBottom: '1px solid var(--church-gold)', paddingBottom: '6px', marginBottom: '15px' }}>
+              담임목사 소개
+            </h4>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+              <div className="church-card" style={{ padding: '15px' }}>
+                <h5 style={{ margin: '0 0 10px 0', color: 'var(--church-navy)' }}>이상문 담임목사 인사말</h5>
+                <img src="/ministerWord.jpg" alt="인사말" style={{ width: '100%', borderRadius: '8px' }} />
+              </div>
+              <div className="church-card" style={{ padding: '15px' }}>
+                <h5 style={{ margin: '0 0 10px 0', color: 'var(--church-navy)' }}>이상문 담임목사 약력</h5>
+                <img src="/pastor-details.jpg" alt="약력" style={{ width: '100%', borderRadius: '8px' }} />
+              </div>
+            </div>
+          </div>
+
+          <div style={{ marginBottom: '40px' }}>
+            <h4 className="font-serif" style={{ fontSize: '1.3rem', color: 'var(--church-gold)', borderBottom: '1px solid var(--church-gold)', paddingBottom: '6px', marginBottom: '15px' }}>
               서울 방화예배당 교역자
             </h4>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '20px' }}>
@@ -411,65 +442,6 @@ export default function AboutView() {
                 </div>
               ))}
             </div>
-          </div>
-        </div>
-      )}
-
-      {/* 담임목사 소개 이미지 팝업 모달 */}
-      {pastorModal && (
-        <div style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          backgroundColor: 'rgba(15, 23, 42, 0.85)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          zIndex: 1000,
-          padding: '20px'
-        }} onClick={() => setPastorModal(null)}>
-          <div style={{
-            backgroundColor: 'var(--church-white)',
-            borderRadius: '12px',
-            padding: '20px',
-            maxWidth: '650px',
-            maxHeight: '90vh',
-            overflowY: 'auto',
-            position: 'relative',
-            boxShadow: 'var(--church-shadow-lg)'
-          }} onClick={(e) => e.stopPropagation()}>
-            <button 
-              onClick={() => setPastorModal(null)}
-              style={{
-                position: 'absolute',
-                top: '15px',
-                right: '15px',
-                border: 'none',
-                background: 'var(--church-navy)',
-                color: '#fff',
-                borderRadius: '50%',
-                width: '30px',
-                height: '30px',
-                cursor: 'pointer',
-                fontWeight: 'bold',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                zIndex: 10
-              }}
-            >
-              ✕
-            </button>
-            <h4 className="font-serif" style={{ fontSize: '1.2rem', color: 'var(--church-navy)', marginBottom: '15px', borderBottom: '1px solid var(--church-beige-dark)', paddingBottom: '10px' }}>
-              {pastorModal === 'word' ? '이상문 담임목사 인사말' : '이상문 담임목사 약력 소개'}
-            </h4>
-            <img 
-              src={pastorModal === 'word' ? '/ministerWord.jpg' : '/pastor-details.jpg'}
-              alt="담임목사 소개 상세"
-              style={{ width: '100%', height: 'auto', borderRadius: '8px' }}
-            />
           </div>
         </div>
       )}
