@@ -10,12 +10,12 @@ export default function Footer() {
               ⛪ 두란노교회
             </h4>
             <p>우리는 오직 성경, 오직 은혜, 오직 믿음으로 하나님께 영광을 돌리는 신앙 공동체입니다.</p>
-            <p style={{ marginTop: '15px' }}>
-              담임목사: 이상문 | 부목사: 남기호 | 주소: 경기도 김포시 김포한강4로 123
-            </p>
-            <p>이메일: info@duranno.org | 대표번호: 031-987-6543</p>
+            <div style={{ marginTop: '15px', fontSize: '0.88rem', lineHeight: '1.6' }}>
+              <strong>방화예배당 (서울)</strong>: 서울 강서구 금낭화로 52 | 📞 02-2662-5591<br />
+              <strong>운양예배당 (김포)</strong>: 경기 김포시 김포한강4로 123 | 📞 031-987-6543<br />
+              담임목사: 이상문 | 이메일: info@duranno.org
+            </div>
           </div>
-          
           <div>
             <h4>예배 안내</h4>
             <p><strong>주일 3부 대예배</strong>: 오전 11:30 (대예배실)</p>

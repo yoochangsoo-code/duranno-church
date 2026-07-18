@@ -37,12 +37,21 @@ export default function Navbar({
     setCurrentTab(tabId);
     setIsMenuOpen(false);
   };
-
   return (
     <nav className="church-navbar">
       <div className="church-container nav-wrapper">
-        <a href="#home" className="logo" onClick={() => handleMenuClick('home')}>
-          ⛪ 두란노<span>교회</span>
+        <a href="#home" className="logo" onClick={() => handleMenuClick('home')} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <img 
+            src="/logo.png" 
+            alt="두란노교회 로고" 
+            style={{ height: '36px', width: 'auto', objectFit: 'contain' }}
+            onError={(e) => {
+              e.currentTarget.style.display = 'none';
+              const textSpan = document.getElementById('navbar-logo-text');
+              if (textSpan) textSpan.style.display = 'inline';
+            }}
+          />
+          <span id="navbar-logo-text" style={{ display: 'none', fontWeight: 'bold' }}>⛪ 두란노교회</span>
         </a>
 
         {/* 데스크톱 메뉴 */}
