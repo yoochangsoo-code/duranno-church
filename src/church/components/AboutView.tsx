@@ -87,35 +87,53 @@ export default function AboutView() {
               <h3 className="font-serif" style={{ fontSize: '1.6rem', color: 'var(--church-navy)', marginBottom: '15px' }}>
                 환영합니다! 담임목사 이상문입니다.
               </h3>
-              <p style={{ lineHeight: 1.8, color: 'var(--church-text-dark)', marginBottom: '20px' }}>
-                우리 두란노교회 홈페이지를 방문해 주신 여러분을 진심으로 환영하고 축복합니다.
-                우리 교회는 오직 예수 그리스도의 십자가 복음과 사랑 위에 세워진 건강하고 은혜가 풍성한 신앙 공동체입니다. 
-                매주 선포되는 생명의 말씀과 아름다운 사랑의 교제를 통해 하나님이 주시는 참된 평강과 회복을 누리시길 소망합니다.
+              <p style={{ lineHeight: 1.8, color: 'var(--church-text-dark)', marginBottom: '20px', whiteSpace: 'pre-line' }}>
+                {`할렐루야!
+
+                두란노교회 홈페이지를 찾아 주신 두란노교회 성도님들과 하나님의 사랑 안에 있는 형제, 자매님들을 주님의 이름으로 환영합니다.
+
+                4차 산업혁명으로 시작된 초연결 사회와 비대면 소통의 시대를 보내면서 하루하루가 급변하고 새로운 것들이 나타나고 사라집니다. 하지만, 시간이 흘러도 변함없는 것은 하나님의 사랑임을 다시 확인합니다.
+
+                가상 공간인 인터넷 홈페이지에서도 하나님의 사랑이 가득하길 소망합니다. 종종 놀러오셔서 교제하시고 늘 열려 있는 두란노교회를 통해서 하나님을 만나게 되시길 기대합니다.
+
+                여러분 모두를 사랑하고, 축복합니다.`}
               </p>
+              <div style={{ textAlign: 'right', fontWeight: 'bold', fontSize: '1.1rem', color: 'var(--church-navy)', marginTop: '15px' }}>
+                담임목사 이상문
+              </div>
             </div>
           </div>
 
-          {/* 담임목사 인사말 및 약력 이미지 본문 내장 출력 */}
-          <div style={{ marginTop: '40px', marginBottom: '50px', display: 'flex', flexDirection: 'column', gap: '40px', alignItems: 'center' }} className="pastor-intro-images">
-            <div style={{ width: '100%', maxWidth: '750px', boxShadow: 'var(--church-shadow-md)', borderRadius: '12px', overflow: 'hidden', border: '1px solid var(--church-beige-dark)' }}>
-              <h4 className="font-serif" style={{ backgroundColor: 'var(--church-navy)', color: 'var(--church-white)', padding: '12px 20px', margin: 0, fontSize: '1.1rem', fontWeight: 'bold' }}>
-                📖 담임목사 인사말 원본
-              </h4>
-              <img 
-                src="/ministerWord.jpg" 
-                alt="담임목사 인사말 원본" 
-                style={{ width: '100%', height: 'auto', display: 'block' }}
-              />
-            </div>
-            <div style={{ width: '100%', maxWidth: '750px', boxShadow: 'var(--church-shadow-md)', borderRadius: '12px', overflow: 'hidden', border: '1px solid var(--church-beige-dark)' }}>
-              <h4 className="font-serif" style={{ backgroundColor: 'var(--church-navy)', color: 'var(--church-white)', padding: '12px 20px', margin: 0, fontSize: '1.1rem', fontWeight: 'bold' }}>
-                🎓 담임목사 약력 소개
-              </h4>
-              <img 
-                src="/pastor-details.jpg" 
-                alt="담임목사 약력 소개" 
-                style={{ width: '100%', height: 'auto', display: 'block' }}
-              />
+          {/* 담임목사 학력 및 약력 텍스트화 출력 */}
+          <div style={{ marginTop: '40px', marginBottom: '50px' }} className="pastor-details-section">
+            <h3 className="font-serif" style={{ fontSize: '1.6rem', color: 'var(--church-navy)', marginBottom: '20px', borderBottom: '1px solid var(--church-beige-dark)', paddingBottom: '8px' }}>
+              🎓 담임목사 학력 및 약력
+            </h3>
+            
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '30px' }} className="details-grid">
+              <div className="church-card" style={{ padding: '25px', backgroundColor: 'var(--church-white)' }}>
+                <h4 className="font-serif" style={{ color: 'var(--church-gold)', fontSize: '1.2rem', marginBottom: '15px', borderBottom: '1px solid var(--church-beige-dark)', paddingBottom: '5px' }}>학력 사항</h4>
+                <ul style={{ paddingLeft: '20px', margin: 0, lineHeight: '2.0', color: 'var(--church-text-dark)' }}>
+                  <li>성결대학교 졸업</li>
+                  <li>성결대학교 대학원 졸업</li>
+                  <li>한영대학교 대학원 졸업</li>
+                  <li>연세대학교 연합신학대학원 졸업</li>
+                </ul>
+              </div>
+              
+              <div className="church-card" style={{ padding: '25px', backgroundColor: 'var(--church-white)' }}>
+                <h4 className="font-serif" style={{ color: 'var(--church-gold)', fontSize: '1.2rem', marginBottom: '15px', borderBottom: '1px solid var(--church-beige-dark)', paddingBottom: '5px' }}>주요 약력</h4>
+                <ul style={{ paddingLeft: '20px', margin: 0, lineHeight: '1.8', color: 'var(--church-text-dark)', fontSize: '0.92rem', listStyleType: 'none' }}>
+                  <li style={{ marginBottom: '6px' }}><span style={{ color: 'var(--church-navy)', fontWeight: 'bold', marginRight: '6px' }}>[전]</span> 예수교대한성결교회 총회 부총회장</li>
+                  <li style={{ marginBottom: '6px' }}><span style={{ color: 'var(--church-navy)', fontWeight: 'bold', marginRight: '6px' }}>[전]</span> 예성 총회 성결교신학교 이사장</li>
+                  <li style={{ marginBottom: '6px' }}><span style={{ color: 'var(--church-navy)', fontWeight: 'bold', marginRight: '6px' }}>[전]</span> 예성 국내선교위원회 위원장</li>
+                  <li style={{ marginBottom: '6px' }}><span style={{ color: 'var(--church-navy)', fontWeight: 'bold', marginRight: '6px' }}>[전]</span> 예성 부흥사회 대표회장 및 총재</li>
+                  <li style={{ marginBottom: '6px' }}><span style={{ color: 'var(--church-navy)', fontWeight: 'bold', marginRight: '6px' }}>[전]</span> 예성 서울서지방회 회장 (29, 33회)</li>
+                  <li style={{ marginBottom: '6px' }}><span style={{ color: 'var(--church-navy)', fontWeight: 'bold', marginRight: '6px' }}>[현]</span> 성결대학교 이사 / 총회 성결교신학교 이사</li>
+                  <li style={{ marginBottom: '6px' }}><span style={{ color: 'var(--church-navy)', fontWeight: 'bold', marginRight: '6px' }}>[현]</span> 아프리카 가나 신학대학교 이사</li>
+                  <li style={{ marginBottom: '6px' }}><span style={{ color: 'var(--church-navy)', fontWeight: 'bold', marginRight: '6px' }}>[현]</span> 김포 푸드뱅크 이사</li>
+                </ul>
+              </div>
             </div>
           </div>
 
@@ -398,14 +416,17 @@ export default function AboutView() {
             <h4 className="font-serif" style={{ fontSize: '1.3rem', color: 'var(--church-gold)', borderBottom: '1px solid var(--church-gold)', paddingBottom: '6px', marginBottom: '15px' }}>
               담임목사 소개
             </h4>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
-              <div className="church-card" style={{ padding: '15px' }}>
-                <h5 style={{ margin: '0 0 10px 0', color: 'var(--church-navy)' }}>이상문 담임목사 인사말</h5>
-                <img src="/ministerWord.jpg" alt="인사말" style={{ width: '100%', borderRadius: '8px' }} />
+            <div className="church-card" style={{ padding: '25px', display: 'flex', gap: '25px', alignItems: 'center', flexWrap: 'wrap' }}>
+              <div style={{ width: '120px', height: '150px', borderRadius: '8px', overflow: 'hidden', flexShrink: 0, backgroundColor: 'var(--church-beige-dark)' }}>
+                <img src="/pastor.jpg" alt="이상문 목사" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               </div>
-              <div className="church-card" style={{ padding: '15px' }}>
-                <h5 style={{ margin: '0 0 10px 0', color: 'var(--church-navy)' }}>이상문 담임목사 약력</h5>
-                <img src="/pastor-details.jpg" alt="약력" style={{ width: '100%', borderRadius: '8px' }} />
+              <div style={{ flex: '1', minWidth: '250px' }}>
+                <h5 style={{ margin: 0, fontSize: '1.25rem', color: 'var(--church-navy)', fontWeight: 'bold' }}>이상문 담임목사</h5>
+                <p style={{ margin: '8px 0 0 0', fontSize: '0.92rem', color: 'var(--church-text-dark)', lineHeight: '1.6' }}>
+                  성결대학교 및 동 대학원 졸업, 연세대학교 연합신학대학원 졸업.<br />
+                  예수교대한성결교회 전 총회 부총회장, 현 성결대학교 이사.<br />
+                  복음의 은혜와 말씀의 기쁨 위에 든든히 선 신앙의 동반자가 되겠습니다.
+                </p>
               </div>
             </div>
           </div>
