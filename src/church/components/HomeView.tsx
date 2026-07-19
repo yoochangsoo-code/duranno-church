@@ -12,7 +12,7 @@ export default function HomeView() {
       
       {/* 표어 배너 (고화질 일러스트 적용) */}
       <div style={{
-        backgroundImage: 'linear-gradient(rgba(15, 23, 42, 0.45), rgba(15, 23, 42, 0.65)), url("/church-main.jpg")',
+        backgroundImage: 'linear-gradient(rgba(15, 23, 42, 0.55), rgba(15, 23, 42, 0.75)), url("/church-building.jpg")',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         color: 'var(--church-white)',
