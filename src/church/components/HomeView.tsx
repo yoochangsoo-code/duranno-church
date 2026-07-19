@@ -22,11 +22,27 @@ export default function HomeView() {
         marginBottom: '50px',
         boxShadow: 'var(--church-shadow-md)'
       }}>
-        <span style={{ color: 'var(--church-gold)', fontWeight: 'bold', fontSize: '1.1rem', letterSpacing: '1px' }}>2026년 교회 표어</span>
-        <h3 className="font-serif" style={{ fontSize: '2.2rem', marginTop: '10px', marginBottom: '15px', color: '#fff' }}>
+        <span style={{ 
+          color: 'var(--church-gold)', 
+          fontWeight: 'bold', 
+          fontSize: '1.1rem', 
+          letterSpacing: '1px',
+          textShadow: '-1.5px -1.5px 0 #000, 1.5px -1.5px 0 #000, -1.5px 1.5px 0 #000, 1.5px 1.5px 0 #000, 0px 2px 3px rgba(0,0,0,0.5)'
+        }}>2026년 교회 표어</span>
+        <h3 className="font-serif" style={{ 
+          fontSize: '2.2rem', 
+          marginTop: '10px', 
+          marginBottom: '15px', 
+          color: '#fff',
+          textShadow: '-2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000, 0px 3px 5px rgba(0,0,0,0.6)'
+        }}>
           소통하고 변화하며 세상을 이롭게 하는 교회
         </h3>
-        <p style={{ opacity: 0.9 }}>에베소서 4장 15-16절</p>
+        <p style={{ 
+          opacity: 0.9,
+          fontWeight: '500',
+          textShadow: '-1.5px -1.5px 0 #000, 1.5px -1.5px 0 #000, -1.5px 1.5px 0 #000, 1.5px 1.5px 0 #000'
+        }}>에베소서 4장 15-16절</p>
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '30px', marginTop: '40px' }} className="home-grid">
