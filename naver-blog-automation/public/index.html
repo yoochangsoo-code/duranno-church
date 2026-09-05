@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>네이버 블로그 여행 전문 포스팅 자동화 대시보드</title>
+  <!-- 구글 폰트: Noto Sans KR & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <!-- CSS 스타일시트 -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- 사이드바 / 헤더 영역 -->
+    <header class="app-header">
+      <div class="logo-area">
+        <div class="logo-icon">N</div>
+        <div>
+          <h1>네이버 블로그 여행 전문 자동화</h1>
+          <p class="subtitle">시사 PD의 시선 & 5대 여행 테마 자동 발행 시스템</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <div class="scheduler-status" id="schedulerStatusBadge">
+          <span class="status-dot inactive"></span>
+          <span class="status-text">스케줄러 일시정지됨</span>
+        </div>
+        <button id="openBrowserBtn" class="btn btn-outline" style="border-color: #03c75a; color: #03c75a; font-weight: 600;">
+          🌐 로그인 크롬창 열기 (9222)
+        </button>
+        <button id="toggleSchedulerBtn" class="btn btn-outline">
+          🚀 스케줄러 시작
+        </button>
+      </div>
+    </header>
+
+    <!-- 메인 콘텐츠 영역 -->
+    <main class="main-content">
+      <!-- 상단 컨트롤 카드 2열 배치 -->
+      <div class="grid-2col">
+        <!-- 1. 즉시 포스팅 실행 카드 -->
+        <section class="card quick-post-card">
+          <div class="card-header">
+            <h2>⚡ 여행 포스팅 즉시 발행</h2>
+            <p>시사 PD 페르소나와 5대 테마에 맞추어 고품질 원고와 사진을 자동 등록합니다.</p>
+          </div>
+          <div class="card-body">
+            <!-- '다른 주제 직접 입력' 체크 토글 -->
+            <div class="form-group" style="background: rgba(15, 23, 42, 0.4); padding: 12px 16px; border-radius: 10px; border: 1px solid var(--border-color); margin-bottom: 16px;">
+              <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; font-weight: 600; color: #38bdf8;">
+                <input type="checkbox" id="customTopicEnabled" style="width: 18px; height: 18px; cursor: pointer;">
+                <span>'다른 주제' 직접 입력 모드</span>
+              </label>
+              <p style="font-size: 12px; color: var(--text-muted); margin-top: 6px; margin-left: 28px;">
+                체크 해제 시 시스템이 스스로 5가지 여행 테마 중 하나를 정하고 중점 여행지 가중치를 반영합니다.
+              </p>
+            </div>
+
+            <!-- 주제 입력창 (체크 시 활성화) -->
+            <div class="form-group" id="topicInputGroup">
+              <label for="instantKeyword">포스팅 주제 직접 입력</label>
+              <input type="text" id="instantKeyword" placeholder="다른 주제 체크 시에만 활성화됩니다" disabled />
+              <div id="topicModeNotice" style="font-size: 12px; color: #10b981; margin-top: 6px;">
+                🧭 <strong>현재 모드</strong>: 5대 여행 테마 자동 선정 (중점 여행지 2배 가중치 적용)
+              </div>
+            </div>
+
+            <button id="btnPostNow" class="btn btn-primary btn-block">
+              <span class="btn-text">✨ 즉시 AI 글 작성 & 네이버 블로그 발행</span>
+              <div class="spinner hidden" id="postNowSpinner"></div>
+            </button>
+            <div id="instantPostResult" class="alert-box hidden"></div>
+          </div>
+        </section>
+
+        <!-- 2. 계정, 중점 여행지 & AI 보안 설정 카드 -->
+        <section class="card config-card">
+          <div class="card-header">
+            <h2>🗺️ 중점 여행지 & 블로그 설정</h2>
+            <p>자동 주제 선정 시 지정된 도시에 <strong>2배의 우선 추첨 가중치</strong>가 부여됩니다.</p>
+          </div>
+          <div class="card-body">
+            <form id="configForm">
+              <!-- 중점 여행지 입력 필드 -->
+              <div class="form-group">
+                <label for="priorityDestinations">🎯 중점 여행지 (쉼표로 구분, 가중치 2배)</label>
+                <input type="text" id="priorityDestinations" placeholder="예: 서안, 방콕, 바르셀로나, 교토" />
+                <span style="font-size: 11px; color: var(--text-muted); display: block; margin-top: 4px;">
+                  등록된 도시들은 5대 테마 자동 선정 시 일반 도시보다 2배 자주 다뤄집니다.
+                </span>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="naverId">네이버 블로그 ID</label>
+                  <input type="text" id="naverId" placeholder="cbsctour" required />
+                </div>
+                <div class="form-group">
+                  <label for="naverPw">비밀번호 (선택)</label>
+                  <input type="password" id="naverPw" placeholder="••••••••" />
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="aiProvider">AI 생성 모델</label>
+                  <select id="aiProvider">
+                    <option value="mock">시사 PD 에세이 모크 (API 키 없음)</option>
+                    <option value="openai">OpenAI (GPT-4o)</option>
+                    <option value="gemini">Google Gemini</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="aiApiKey">AI API Key</label>
+                  <input type="password" id="aiApiKey" placeholder="sk-..." />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="cronSchedule">정기 자동 포스팅 주기 (Cron 표현식)</label>
+                <input type="text" id="cronSchedule" placeholder="0 10 * * * (매일 오전 10시)" required />
+              </div>
+
+              <button type="submit" id="btnSaveConfig" class="btn btn-secondary btn-block">
+                💾 여행지 및 대시보드 설정 저장
+              </button>
+            </form>
+          </div>
+        </section>
+      </div>
+
+      <!-- 5대 여행 테마 안내 카드 -->
+      <section class="card" style="margin-bottom: 28px; background: rgba(30, 41, 59, 0.5);">
+        <div class="card-header">
+          <h2 style="font-size: 16px; color: #cbd5e1;">📌 여행 테마 5대 원칙 & 블로그 카테고리 매핑 규칙</h2>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; font-size: 12.5px; color: #94a3b8;">
+          <div style="padding: 10px; background: rgba(15, 23, 42, 0.4); border-radius: 8px; border-left: 3px solid #38bdf8;">
+            <strong style="color: #f1f5f9;">테마 1. 도시 숨은 이야기</strong><br>
+            부정적 내용 배제, 흥미진진한 비화<br>
+            <span style="color: #38bdf8;">📁 [여행 and 이야기]</span>
+          </div>
+          <div style="padding: 10px; background: rgba(15, 23, 42, 0.4); border-radius: 8px; border-left: 3px solid #38bdf8;">
+            <strong style="color: #f1f5f9;">테마 2. Top 5 명소/맛집</strong><br>
+            맛집, 사진 명소 등 알짜 큐레이션<br>
+            <span style="color: #38bdf8;">📁 [여행 and 이야기]</span>
+          </div>
+          <div style="padding: 10px; background: rgba(15, 23, 42, 0.4); border-radius: 8px; border-left: 3px solid #38bdf8;">
+            <strong style="color: #f1f5f9;">테마 3. 역사와 유래</strong><br>
+            수백년 전 도시 모습, 음식의 유래<br>
+            <span style="color: #38bdf8;">📁 [여행 and 이야기]</span>
+          </div>
+          <div style="padding: 10px; background: rgba(15, 23, 42, 0.4); border-radius: 8px; border-left: 3px solid #10b981;">
+            <strong style="color: #f1f5f9;">테마 4. 사진과 생각</strong><br>
+            실제 공식 사진 중심 감성 에세이<br>
+            <span style="color: #10b981;">📁 [사진과 생각]</span>
+          </div>
+          <div style="padding: 10px; background: rgba(15, 23, 42, 0.4); border-radius: 8px; border-left: 3px solid #f59e0b;">
+            <strong style="color: #f1f5f9;">테마 5. 여행도 장비빨</strong><br>
+            실전 여행 기기/장비 성능/가격 리뷰<br>
+            <span style="color: #f59e0b;">📁 [여행도 장비빨]</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 하단 포스팅 실행 이력 및 로그 카드 -->
+      <section class="card logs-card">
+        <div class="card-header flex-between">
+          <div>
+            <h2>📜 포스팅 실행 기록 및 로그</h2>
+            <p>자동 및 수동 포스팅 성공/실패 내역과 카테고리 분류 현황</p>
+          </div>
+          <button id="btnRefreshLogs" class="btn btn-sm btn-outline">🔄 새로고침</button>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="logs-table">
+              <thead>
+                <tr>
+                  <th>실행 일시</th>
+                  <th>주제 / 키워드</th>
+                  <th>발행 카테고리</th>
+                  <th>생성된 제목</th>
+                  <th>상태</th>
+                  <th>상세 메시지</th>
+                </tr>
+              </thead>
+              <tbody id="logsTableBody">
+                <tr>
+                  <td colspan="6" class="text-center empty-msg">로딩 중입니다...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- 메인 프론트엔드 스크립트 -->
+  <script src="app.js"></script>
+</body>
+</html>

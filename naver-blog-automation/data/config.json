@@ -1,0 +1,23 @@
+{
+  "naverId": "cbsctour",
+  "encryptedNaverPw": "92c5f0c16eb8b7c6bc1e3174:f826b548a29426aa50a328ef6a1e75d3:a66218a9c18f5b7996a7",
+  "aiProvider": "mock",
+  "encryptedAiApiKey": "",
+  "keywords": [
+    "중국 서안 여행",
+    "방콕 숨은 맛집",
+    "교토 힐링 골목길"
+  ],
+  "intervalHours": 4.5,
+  "cronSchedule": "0 */4 * * *",
+  "isEnabled": true,
+  "promptTemplate": "친절하고 읽기 쉬운 구어체 블로그 스타일로 작성해주세요.",
+  "customTopicEnabled": false,
+  "customTopic": "",
+  "priorityDestinations": [
+    "서안",
+    "방콕",
+    "바르셀로나",
+    "교토"
+  ]
+}

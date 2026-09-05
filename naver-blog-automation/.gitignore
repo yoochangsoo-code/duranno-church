@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.env
+.env.*
+!.env.example
+data/session/
+data/sent_emails/
+data/images/
+data/naver_user_data/
+*.log

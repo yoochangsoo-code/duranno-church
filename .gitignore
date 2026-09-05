@@ -14,4 +14,21 @@ outputs/
 /ctourlogo.jpg
 /codex-test/
 /temp_profile/
+/chrome_naver_profile/
+/edge_naver_profile/
+/temp/
 /capture*.png
+*.png
+
+.vercel
+
+# naver-blog-automation
+naver-blog-automation/node_modules/
+naver-blog-automation/dist/
+naver-blog-automation/.env
+naver-blog-automation/.env*
+!naver-blog-automation/.env.example
+naver-blog-automation/data/session/
+naver-blog-automation/data/sent_emails/
+naver-blog-automation/data/images/
+naver-blog-automation/data/naver_user_data/
